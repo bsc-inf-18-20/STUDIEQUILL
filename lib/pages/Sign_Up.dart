@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/components/my_button.dart';
+// import 'package:studie/components/sign_up_button.dart';
 import 'package:studie/components/mytexts.dart';
 // import 'package:studie/components/squar_tile.dart';
 
@@ -20,33 +21,15 @@ class SignUp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 60),
-
-                //logo
-                const Icon(
-                  Icons.lock,
-                  size: 70,
-                ),
-                const SizedBox(height: 50),
-
-                //wellcom
-                Text(
-                  'STUDIE APP ',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 0),
 
                 //username
                 Mytexts(
                   controller: usernameController,
-                  hintText: 'enter username',
+                  hintText: 'enter email',
                   obscureText: false,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
                 //password
                 Mytexts(
@@ -54,7 +37,14 @@ class SignUp extends StatelessWidget {
                   hintText: 'enter password',
                   obscureText: true,
                 ),
-
+                const SizedBox(height: 20),
+                //password
+                Mytexts(
+                  controller: passwordController,
+                  hintText: 'confirm password',
+                  obscureText: true,
+                ),
+                const SizedBox(height: 20),
                 //sign in button
                 MyButton(
                   onTap: signUserUp,
@@ -66,12 +56,3 @@ class SignUp extends StatelessWidget {
         ));
   }
 }
-
-//class SignUp extends StatefulWidget {
-//const SignUp({super.key});
-
-//@override
-//Widget build(BuildContext context) {
-// return Scaffold();
-//}
-//}
