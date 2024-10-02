@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studie/components/my_button.dart';
+import 'package:studie/components/SButton';
+// import 'package:studie/components/my_button.dart';
 // import 'package:studie/components/sign_up_button.dart';
 import 'package:studie/components/mytexts.dart';
 // import 'package:studie/components/squar_tile.dart';
@@ -46,7 +47,7 @@ class SignUp extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 //sign in button
-                MyButton(
+                SButton(
                   onTap: signUserUp,
                 ),
                 const SizedBox(height: 50),
