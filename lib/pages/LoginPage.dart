@@ -31,10 +31,10 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 50),
 
                 //wellcom
-                Text(
+                const Text(
                   'STUDIE APP ',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: Color.fromARGB(255, 51, 124, 112),
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
