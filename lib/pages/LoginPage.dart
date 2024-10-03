@@ -132,6 +132,8 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
+
+                    //register
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -155,12 +157,3 @@ class LoginPage extends StatelessWidget {
         ));
   }
 }
-
-//class LoginPage extends StatefulWidget {
-//const LoginPage({super.key});
-
-//@override
-//Widget build(BuildContext context) {
-// return Scaffold();
-//}
-//}

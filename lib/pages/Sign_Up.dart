@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/components/SButton';
-// import 'package:studie/components/my_button.dart';
-// import 'package:studie/components/sign_up_button.dart';
 import 'package:studie/components/mytexts.dart';
-// import 'package:studie/components/squar_tile.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -22,6 +19,13 @@ class SignUp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 50),
+
+                //logo
+                const Icon(
+                  Icons.lock,
+                  size: 50,
+                ),
                 const SizedBox(height: 0),
 
                 //username
