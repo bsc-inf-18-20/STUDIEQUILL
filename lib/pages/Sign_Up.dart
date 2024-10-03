@@ -21,12 +21,22 @@ class SignUp extends StatelessWidget {
               children: [
                 const SizedBox(height: 50),
 
-                //logo
-                const Icon(
-                  Icons.lock,
-                  size: 50,
+                // //logo
+                // const Icon(
+                //   Icons.lock,
+                //   size: 50,
+                // ),
+                // const SizedBox(height: 120),
+
+                Text(
+                  'SIGN UP FOR STUDIE APP ',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-                const SizedBox(height: 0),
+                const SizedBox(height: 70),
 
                 //username
                 Mytexts(
