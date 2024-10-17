@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:studie/components/my_button.dart';
 import 'package:studie/components/mytexts.dart';
