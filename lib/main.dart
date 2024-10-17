@@ -18,10 +18,8 @@
 //   }
 // }
 
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:studie/pages/HomePage.dart';
-// import 'home_page.dart';
 
 void main() {
   runApp(const MyApp());
