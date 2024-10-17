@@ -35,8 +35,8 @@ class _HomePageState extends State<HomePage> {
           : ThemeData.light(), // Light theme
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
-        ),
+            // title: const Text('Home Page'),
+            ),
         body: _selectedIndex == 5 // If 'Settings' is selected
             ? SettingsPage(
                 isDarkMode: _isDarkMode,
