@@ -1,76 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class HomePage extends StatefulWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   _HomePageState createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   int _selectedIndex = 0;
-
-//   // List of pages for each navigation item
-//   final List<Widget> _pages = [
-//     const Center(child: Text('Home')),
-//     const Center(child: Text('Records')),
-//     const Center(child: Text('Files')),
-//     const Center(child: Text('Notes')),
-//     const Center(child: Text('Workspace')),
-//     const Center(child: Text('Settings')),
-//   ];
-
-//   // Method to handle bottom nav item taps
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Home Page'),
-//       ),
-//       body: _pages[_selectedIndex], // Display the selected page
-
-//       // Bottom navigation bar
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _selectedIndex,
-//         onTap: _onItemTapped, // Handle taps
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'Home',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.list_alt),
-//             label: 'Records',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.folder),
-//             label: 'Files',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.note),
-//             label: 'Notes',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.work),
-//             label: 'Workspace',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.settings),
-//             label: 'Settings',
-//           ),
-//         ],
-//         type: BottomNavigationBarType.fixed, // Ensure the icons are fixed
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -99,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 16.0,
         mainAxisSpacing: 16.0,
         children: [
-          _buildRoundedBox('Record', Icons.mic, Colors.blue),
+          _buildRoundedBox('Record,', Icons.mic, Colors.blue),
           _buildRoundedBox('Pick a File', Icons.file_copy, Colors.green),
           _buildRoundedBox('From URL', Icons.link, Colors.orange),
           _buildRoundedBox('Share File', Icons.share, Colors.red),
@@ -192,7 +119,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Settings',
           ),
         ],
-        type: BottomNavigationBarType.fixed, // Ensure the icons are fixed
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
