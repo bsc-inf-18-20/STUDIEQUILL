@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/LoginPage.dart';
+import 'package:studie/pages/Login_Page.dart';
 import 'package:studie/pages/Sign_Up.dart';
 // import 'pages/LoginPage.dart';
 
