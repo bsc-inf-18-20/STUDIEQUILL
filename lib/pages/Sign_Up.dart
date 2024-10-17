@@ -71,11 +71,10 @@
 //         ));
 //   }
 // }
-
 import 'package:flutter/material.dart';
 import 'package:studie/components/SButton';
 import 'package:studie/components/mytexts.dart';
-import 'package:studie/pages/HomePage.dart';
+import 'package:studie/pages/LoginPage.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -85,7 +84,7 @@ class SignUp extends StatelessWidget {
   final confirmPasswordController =
       TextEditingController(); // Added for confirm password
 
-  //signing user up
+  // Signing user up
   void signUserUp(BuildContext context) {
     // Simple validation example
     final username = usernameController.text.trim();
@@ -102,11 +101,11 @@ class SignUp extends StatelessWidget {
       return;
     }
 
-    // After successful validation or sign-up process, navigate to HomePage
+    // After successful validation or sign-up process, navigate to SignInPage
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const HomePage(), // Navigate to the HomePage
+        builder: (context) => LoginPage(), // Navigate to SignInPage
       ),
     );
   }
