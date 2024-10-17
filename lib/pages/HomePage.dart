@@ -13,10 +13,10 @@ class _HomePageState extends State<HomePage> {
 
   // Define a map of colors for easy customization
   final Map<String, Color> _colorScheme = {
-    'record': const Color.fromARGB(255, 153, 154, 155),
-    'file': const Color.fromARGB(255, 153, 154, 155),
-    'url': const Color.fromARGB(255, 153, 154, 155),
-    'share': const Color.fromARGB(255, 153, 154, 155),
+    'record': const Color.fromARGB(255, 51, 124, 112),
+    'file': const Color.fromARGB(255, 51, 124, 112),
+    'url': const Color.fromARGB(255, 51, 124, 112),
+    'share': const Color.fromARGB(255, 51, 124, 112),
   };
 
   // Method to handle bottom nav item taps
