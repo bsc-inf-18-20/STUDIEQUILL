@@ -1,10 +1,18 @@
+// workspace_page.dart
 import 'package:flutter/material.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class WorkspacePage extends StatelessWidget {
+  const WorkspacePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Workspace'),
+      ),
+      body: const Center(
+        child: Text('This is the Workspace Page'),
+      ),
+    );
   }
 }
