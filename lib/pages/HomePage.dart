@@ -127,21 +127,26 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 16.0,
         mainAxisSpacing: 16.0,
         children: [
-          _buildRoundedBox('Record', Icons.mic, _colorScheme['record']!,
-              context, const RecordsPage()),
-          _buildRoundedBox('Pick a File', Icons.file_copy,
-              _colorScheme['file']!, context, const PickFilePage()),
-          _buildRoundedBox('From URL', Icons.link, _colorScheme['url']!,
-              context, const NotesPage()),
-          _buildRoundedBox('Share File', Icons.share, _colorScheme['share']!,
-              context, const WorkspacePage()),
+          _buildRoundedBox('Record', 'Record audio notes', Icons.mic,
+              _colorScheme['record']!, context, const RecordsPage()),
+          _buildRoundedBox(
+              'Pick a File',
+              'Select files from your device',
+              Icons.file_copy,
+              _colorScheme['file']!,
+              context,
+              const PickFilePage()),
+          _buildRoundedBox('From URL', 'Access notes via URL', Icons.link,
+              _colorScheme['url']!, context, const NotesPage()),
+          _buildRoundedBox('Share File', 'Share files easily', Icons.share,
+              _colorScheme['share']!, context, const WorkspacePage()),
         ],
       ),
     );
   }
 
-  Widget _buildRoundedBox(String title, IconData icon, Color color,
-      BuildContext context, Widget page) {
+  Widget _buildRoundedBox(String title, String subtitle, IconData icon,
+      Color color, BuildContext context, Widget page) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -166,6 +171,14 @@ class _HomePageState extends State<HomePage> {
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: color,
+              ),
+            ),
+            const SizedBox(height: 5), // Space between title and subtitle
+            Text(
+              subtitle, // Display the subtitle
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
               ),
             ),
           ],
