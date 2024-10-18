@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:studie/pages/files_page.dart';
+import 'package:studie/pages/pick_file_page.dart';
 import 'records_page.dart';
-import 'files_page.dart';
 import 'notes_page.dart';
 import 'workspace_page.dart';
 import 'settings_page.dart';
@@ -128,8 +129,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           _buildRoundedBox('Record', Icons.mic, _colorScheme['record']!,
               context, const RecordsPage()),
+          // _buildRoundedBox('Pick a File', Icons.file_copy,
+          //     _colorScheme['file']!, context, const FilesPage()),
           _buildRoundedBox('Pick a File', Icons.file_copy,
-              _colorScheme['file']!, context, const FilesPage()),
+              _colorScheme['file']!, context, const PickFilePage()),
           _buildRoundedBox('From URL', Icons.link, _colorScheme['url']!,
               context, const NotesPage()),
           _buildRoundedBox('Share File', Icons.share, _colorScheme['share']!,
