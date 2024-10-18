@@ -14,7 +14,7 @@ class PickFilePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Pick a file to upload or view',
+              'Pick a file to upload and trascribe',
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
