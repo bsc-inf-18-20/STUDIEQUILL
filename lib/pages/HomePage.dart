@@ -127,18 +127,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 16.0,
         mainAxisSpacing: 16.0,
         children: [
-          _buildRoundedBox('Record', 'Record audio notes', Icons.mic,
+          _buildRoundedBox('Record', 'and transcribe', Icons.mic,
               _colorScheme['record']!, context, const RecordsPage()),
-          _buildRoundedBox(
-              'Pick a File',
-              'Select files from your device',
-              Icons.file_copy,
-              _colorScheme['file']!,
-              context,
-              const PickFilePage()),
-          _buildRoundedBox('From URL', 'Access notes via URL', Icons.link,
+          _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
+              _colorScheme['file']!, context, const PickFilePage()),
+          _buildRoundedBox('From URL', 'From You Tube Or Drive', Icons.link,
               _colorScheme['url']!, context, const NotesPage()),
-          _buildRoundedBox('Share File', 'Share files easily', Icons.share,
+          _buildRoundedBox('Share File', 'From WhatsApp', Icons.share,
               _colorScheme['share']!, context, const WorkspacePage()),
         ],
       ),
@@ -151,8 +146,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => page), // Navigate to corresponding page
+          MaterialPageRoute(builder: (context) => page),
         );
       },
       child: Container(
@@ -177,8 +171,8 @@ class _HomePageState extends State<HomePage> {
             Text(
               subtitle, // Display the subtitle
               style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
+                fontSize: 16,
+                color: Color.fromARGB(255, 51, 124, 112),
               ),
             ),
           ],
