@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/files_page.dart';
-import 'package:studie/pages/pick_file_page.dart';
+import 'package:studie/pages/pickfile_page.dart';
 import 'records_page.dart';
 import 'notes_page.dart';
 import 'workspace_page.dart';
