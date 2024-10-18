@@ -1,25 +1,5 @@
-// import 'package:flutter/material.dart';
-// import 'package:studie/pages/HomePage.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData.light(), // Default light theme
-//       darkTheme: ThemeData.dark(), // Dark theme
-//       home: const HomePage(), // Main app entry point
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
-import 'package:studie/pages/HomePage.dart';
+import 'package:studie/pages/Login_Page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,10 +30,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: _isDarkMode
           ? ThemeMode.dark
           : ThemeMode.light, // Switch based on state
-      home: HomePage(
-        isDarkMode: _isDarkMode,
-        onThemeChange: _toggleTheme, // Pass callback to toggle theme
-      ),
+      home: LoginPage(), // Set LoginPage as the initial screen
     );
   }
 }

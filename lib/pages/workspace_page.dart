@@ -11,7 +11,7 @@ class WorkspacePage extends StatelessWidget {
         title: const Text('Workspace'),
       ),
       body: const Center(
-        child: Text('This is the Workspace Page'),
+        child: Text('still building this feature'),
       ),
     );
   }
