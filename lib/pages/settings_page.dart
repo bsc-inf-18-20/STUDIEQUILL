@@ -72,10 +72,10 @@ class SettingsPage extends StatelessWidget {
   final ValueChanged<bool> onThemeChange;
 
   const SettingsPage({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChange,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

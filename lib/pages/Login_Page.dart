@@ -13,8 +13,7 @@ class LoginPage extends StatelessWidget {
 
   // Signing user in
   void signUserIn(BuildContext context) {
-    // You can add authentication logic here
-    // For now, we'll assume sign-in is successful and navigate to HomePage
+    // For now, i will assume sign-in is successful and navigate to HomePage
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
