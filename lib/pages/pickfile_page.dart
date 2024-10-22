@@ -141,92 +141,102 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart'; // For requesting permissions
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:googleapis_auth/googleapis_auth.dart';
+import 'package:http/http.dart' as http;
 
 class PickFilePage extends StatelessWidget {
   const PickFilePage({super.key});
 
+  // Replace with your OAuth2 credentials
+  final _clientId = "YOUR_CLIENT_ID";
+  final _clientSecret = "YOUR_CLIENT_SECRET";
+
   Future<void> _pickAudioFile(BuildContext context) async {
-    // Request permission to access external storage (Android-specific)
-    print("Requesting storage permission...");
-    if (await _requestStoragePermission()) {
-      print("Permission granted. Opening file picker...");
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.audio, // Use FileType.audio to select audio files
-      );
-
-      if (result != null) {
-        // The user picked a file
-        PlatformFile file = result.files.first;
-
-        // Show file information in a SnackBar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Picked file: ${file.name}')),
-        );
-
-        // Handle the file further if needed (e.g., upload, process, etc.)
-        String? path = file.path; // Get the file path
-
-        if (path != null) {
-          // Optionally open or use the file
-          File audioFile = File(path);
-
-          // Transcribe the audio file
-          String transcription = await _transcribeAudio(audioFile);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Transcription: $transcription')),
-          );
-
-          // Optionally, you could upload the file as well
-          await _uploadAudioFile(audioFile);
-        }
-      } else {
-        // The user canceled the file picker
-        print("No file selected.");
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No file selected')),
-        );
-      }
-    } else {
-      // Permission was denied
-      print("Storage permission denied.");
+    // Step 1: Authenticate with Google
+    var client = await _getAuthenticatedClient();
+    if (client == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Storage permission denied')),
+        const SnackBar(content: Text('Authentication failed')),
+      );
+      return;
+    }
+
+    // Step 2: Access Google Drive
+    final driveApi = drive.DriveApi(client);
+    try {
+      var fileList = await driveApi.files.list(
+        q: "mimeType='audio/mpeg'", // Adjust MIME type as necessary
+        $fields: "files(id,name)",
+      );
+
+      // Step 3: Show file picker (list files)
+      _showFilePicker(context, fileList.files);
+    } catch (e) {
+      print("Error accessing Drive: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to access Google Drive')),
       );
     }
   }
 
-  // Request storage permission (necessary on Android)
-  Future<bool> _requestStoragePermission() async {
-    var status = await Permission.storage.status;
+  // Function to authenticate with Google
+  Future<http.Client?> _getAuthenticatedClient() async {
+    var clientId = ClientId(_clientId, _clientSecret);
+    var scopes = [drive.DriveApi.driveScope];
 
-    if (status.isDenied) {
-      status = await Permission.storage.request();
+    // Using the Google APIs Auth library for OAuth2
+    var flow = await clientViaUserConsent(clientId, scopes, (url) {
+      print("Please go to the following URL: $url");
+    });
+    return flow;
+  }
+
+  void _showFilePicker(BuildContext context, List<drive.File>? files) {
+    if (files == null || files.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No audio files found')),
+      );
+      return;
     }
 
-    return status.isGranted;
-  }
-
-  // Placeholder for audio transcription logic
-  Future<String> _transcribeAudio(File audioFile) async {
-    // Implement your transcription logic here.
-    return "Transcribed text from ${audioFile.path}"; // Replace with actual transcription result
-  }
-
-  // Placeholder for audio upload logic
-  Future<void> _uploadAudioFile(File audioFile) async {
-    // Implement your file upload logic here.
-    print(
-        'Uploading audio file: ${audioFile.path}'); // Replace with actual upload logic
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select an Audio File'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: files.map((file) {
+                return ListTile(
+                  title: Text(file.name ?? 'No name'),
+                  onTap: () {
+                    // Handle file selection
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Selected file: ${file.name}')),
+                    );
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick an Audio File'),
+        title: const Text('Pick an Audio File from Google Drive'),
       ),
       body: Center(
         child: Column(
@@ -239,7 +249,7 @@ class PickFilePage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _pickAudioFile(context),
-              child: const Text('Upload Audio File'),
+              child: const Text('Upload Audio File from Google Drive'),
             ),
           ],
         ),
