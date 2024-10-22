@@ -3,11 +3,10 @@ import 'package:studie/components/my_button.dart';
 import 'package:studie/components/mytexts.dart';
 import 'package:studie/components/squar_tile.dart';
 import 'package:studie/pages/HomePage.dart';
+// import 'package:studie/pages/HomePage.dart';
 import 'package:studie/pages/Sign_Up.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 

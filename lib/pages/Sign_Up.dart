@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:studie/components/SButton';
 import 'package:studie/components/mytexts.dart';
 import 'package:studie/pages/Login_Page.dart';
+// import 'package:studie/pages/Login_Page.dart';
+// import 'package:studie/pages/Login_Page.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
