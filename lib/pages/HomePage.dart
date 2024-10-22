@@ -110,8 +110,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           _buildRoundedBox('Record', 'and transcribe', Icons.mic,
               _colorScheme['record']!, context, const RecordsPage()),
-          _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
-              _colorScheme['file']!, context, const PickFilePage()),
+          // _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
+          //     _colorScheme['file']!, context, const PickFilePage()),
           _buildRoundedBox('From URL', 'From You Tube Or Drive', Icons.link,
               _colorScheme['url']!, context, const NotesPage()),
           _buildRoundedBox('Share File', 'From WhatsApp', Icons.share,

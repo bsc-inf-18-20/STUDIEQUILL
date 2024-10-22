@@ -139,121 +139,127 @@
 //     );
 //   }
 // }
+// import 'package:flutter/material.dart';
+// import 'package:googleapis/drive/v3.dart' as drive;
+// import 'package:googleapis_auth/googleapis_auth.dart';
+// import 'package:http/http.dart' as http;
 
-import 'package:flutter/material.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:googleapis_auth/googleapis_auth.dart';
-import 'package:http/http.dart' as http;
+// class PickFilePage extends StatelessWidget {
+//   const PickFilePage({super.key});
 
-class PickFilePage extends StatelessWidget {
-  const PickFilePage({super.key});
+//   // Replace with your OAuth2 credentials
+//   final String _clientId = "YOUR_CLIENT_ID";
+//   final String _clientSecret = "YOUR_CLIENT_SECRET";
 
-  // Replace with your OAuth2 credentials
-  final _clientId = "YOUR_CLIENT_ID";
-  final _clientSecret = "YOUR_CLIENT_SECRET";
+//   Future<void> _pickAudioFile(BuildContext context) async {
+//     // Step 1: Authenticate with Google
+//     var client = await _getAuthenticatedClient();
+//     if (client == null) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('Authentication failed')),
+//       );
+//       return;
+//     }
 
-  Future<void> _pickAudioFile(BuildContext context) async {
-    // Step 1: Authenticate with Google
-    var client = await _getAuthenticatedClient();
-    if (client == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Authentication failed')),
-      );
-      return;
-    }
+//     // Step 2: Access Google Drive
+//     final driveApi = drive.DriveApi(client);
+//     try {
+//       var fileList = await driveApi.files.list(
+//         q: "mimeType='audio/mpeg'", // Adjust MIME type as necessary
+//         $fields: "files(id,name)",
+//       );
 
-    // Step 2: Access Google Drive
-    final driveApi = drive.DriveApi(client);
-    try {
-      var fileList = await driveApi.files.list(
-        q: "mimeType='audio/mpeg'", // Adjust MIME type as necessary
-        $fields: "files(id,name)",
-      );
+//       // Step 3: Show file picker (list files)
+//       _showFilePicker(context, fileList.files);
+//     } catch (e) {
+//       print("Error accessing Drive: $e");
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('Failed to access Google Drive')),
+//       );
+//     } finally {
+//       client.close(); // Close the client after use
+//     }
+//   }
 
-      // Step 3: Show file picker (list files)
-      _showFilePicker(context, fileList.files);
-    } catch (e) {
-      print("Error accessing Drive: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to access Google Drive')),
-      );
-    }
-  }
+//   // Function to authenticate with Google
+//   Future<http.Client?> _getAuthenticatedClient() async {
+//     var clientId = ClientId(_clientId, _clientSecret);
+//     var scopes = [drive.DriveApi.driveScope]; // Adjust scopes as necessary
 
-  // Function to authenticate with Google
-  Future<http.Client?> _getAuthenticatedClient() async {
-    var clientId = ClientId(_clientId, _clientSecret);
-    var scopes = [drive.DriveApi.driveScope];
+//     // Using the Google APIs Auth library for OAuth2
+//     try {
+//       var flow = await clientViaUserConsent(clientId, scopes, (url) {
+//         print("Please go to the following URL: $url");
+//       });
+//       return flow;
+//     } catch (e) {
+//       print("Authentication error: $e");
+//       return null;
+//     }
+//   }
 
-    // Using the Google APIs Auth library for OAuth2
-    var flow = await clientViaUserConsent(clientId, scopes, (url) {
-      print("Please go to the following URL: $url");
-    });
-    return flow;
-  }
+//   void _showFilePicker(BuildContext context, List<drive.File>? files) {
+//     if (files == null || files.isEmpty) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('No audio files found')),
+//       );
+//       return;
+//     }
 
-  void _showFilePicker(BuildContext context, List<drive.File>? files) {
-    if (files == null || files.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No audio files found')),
-      );
-      return;
-    }
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text('Select an Audio File'),
+//           content: SingleChildScrollView(
+//             child: ListBody(
+//               children: files.map((file) {
+//                 return ListTile(
+//                   title: Text(file.name ?? 'No name'),
+//                   onTap: () {
+//                     // Handle file selection
+//                     ScaffoldMessenger.of(context).showSnackBar(
+//                       SnackBar(content: Text('Selected file: ${file.name}')),
+//                     );
+//                     Navigator.of(context).pop();
+//                   },
+//                 );
+//               }).toList(),
+//             ),
+//           ),
+//           actions: [
+//             TextButton(
+//               onPressed: () => Navigator.of(context).pop(),
+//               child: const Text('Cancel'),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select an Audio File'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: files.map((file) {
-                return ListTile(
-                  title: Text(file.name ?? 'No name'),
-                  onTap: () {
-                    // Handle file selection
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Selected file: ${file.name}')),
-                    );
-                    Navigator.of(context).pop();
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pick an Audio File from Google Drive'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Pick an audio file to upload and transcribe',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _pickAudioFile(context),
-              child: const Text('Upload Audio File from Google Drive'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Pick an Audio File from Google Drive'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             const Text(
+//               'Pick an audio file to upload and transcribe',
+//               style: TextStyle(fontSize: 18),
+//             ),
+//             const SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () => _pickAudioFile(context),
+//               child: const Text('Upload Audio File from Google Drive'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
