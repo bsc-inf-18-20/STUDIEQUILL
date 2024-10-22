@@ -150,7 +150,9 @@ class PickFilePage extends StatelessWidget {
 
   Future<void> _pickAudioFile(BuildContext context) async {
     // Request permission to access external storage (Android-specific)
+    print("Requesting storage permission...");
     if (await _requestStoragePermission()) {
+      print("Permission granted. Opening file picker...");
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.audio, // Use FileType.audio to select audio files
       );
@@ -182,12 +184,14 @@ class PickFilePage extends StatelessWidget {
         }
       } else {
         // The user canceled the file picker
+        print("No file selected.");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No file selected')),
         );
       }
     } else {
       // Permission was denied
+      print("Storage permission denied.");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Storage permission denied')),
       );
@@ -208,15 +212,12 @@ class PickFilePage extends StatelessWidget {
   // Placeholder for audio transcription logic
   Future<String> _transcribeAudio(File audioFile) async {
     // Implement your transcription logic here.
-    // For example, you might use a service like Google Speech-to-Text
-    // This is just a placeholder for now.
     return "Transcribed text from ${audioFile.path}"; // Replace with actual transcription result
   }
 
   // Placeholder for audio upload logic
   Future<void> _uploadAudioFile(File audioFile) async {
     // Implement your file upload logic here.
-    // This could involve uploading to a server or cloud storage.
     print(
         'Uploading audio file: ${audioFile.path}'); // Replace with actual upload logic
   }
@@ -238,7 +239,7 @@ class PickFilePage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _pickAudioFile(context),
-              child: const Text('Pick Audio File'),
+              child: const Text('Upload Audio File'),
             ),
           ],
         ),
