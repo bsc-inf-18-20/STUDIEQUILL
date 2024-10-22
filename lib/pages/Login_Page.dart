@@ -10,6 +10,8 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  LoginPage({super.key});
+
   // Signing user in
   void signUserIn(BuildContext context) {
     // For now, i will assume sign-in is successful and navigate to HomePage
