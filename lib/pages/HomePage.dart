@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/files_page.dart';
+import 'package:studie/pages/notes_page.dart';
 import 'package:studie/pages/pickfile_page.dart';
+import 'package:studie/pages/workspace_page.dart';
 import 'records_page.dart';
-import 'notes_page.dart';
-import 'workspace_page.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,19 +47,8 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(builder: (context) => const FilesPage()),
         );
         break;
+
       case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const NotesPage()),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const WorkspacePage()),
-        );
-        break;
-      case 5:
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -94,20 +83,12 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
+            icon: Icon(Icons.mic),
             label: 'Records',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.folder),
             label: 'Files',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note),
-            label: 'Notes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work),
-            label: 'Workspace',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

@@ -38,10 +38,15 @@ class LoginPage extends StatelessWidget {
             children: [
               const SizedBox(height: 60),
 
-              // logo
+              // SquarTile(
+              //   imagePath: 'lib/images/lock.png',
+              // ),
+              // SizedBox(width: 25),
+
+              // // logo
               const Icon(
-                Icons.lock,
-                size: 70,
+                Icons.mic,
+                size: 100,
               ),
               const SizedBox(height: 50),
 
