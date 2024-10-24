@@ -5,12 +5,28 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About Us'),
+        title: Text('About Us'),
       ),
-      body: const Center(
-        child: Text(
-          'Learn more about us here.',
-          style: TextStyle(fontSize: 24),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              'About TranscribeApp',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'TranscribeApp is a state-of-the-art audio transcription platform designed to make converting audio to text easy and efficient. '
+              'Our mission is to provide users with high-quality transcription services powered by advanced AI technology.',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Contact Us: support@transcribeapp.com',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );
