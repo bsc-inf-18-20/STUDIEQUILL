@@ -5,12 +5,29 @@ class LikeRateUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Like or Rate Us'),
+        title: Text('Like or Rate Us'),
       ),
-      body: const Center(
-        child: Text(
-          'Please like or rate us!',
-          style: TextStyle(fontSize: 24),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Enjoying the app? Leave us a review!'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Implement logic to open app store for rating
+              },
+              child: Text('Rate Us on App Store'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Implement social media sharing logic
+              },
+              child: Text('Share on Social Media'),
+            ),
+          ],
         ),
       ),
     );
