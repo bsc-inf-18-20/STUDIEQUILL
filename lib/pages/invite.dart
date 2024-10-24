@@ -1,41 +1,43 @@
 import 'package:flutter/material.dart';
 
 class InvitePage extends StatelessWidget {
+  const InvitePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Invite Friends'),
+        title: const Text('Invite Friends'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Invite your friends to TranscribeApp and earn free transcriptions!',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton.icon(
-              icon: Icon(Icons.email),
-              label: Text('Invite via Email'),
+              icon: const Icon(Icons.email),
+              label: const Text('Invite via Email'),
               onPressed: () {
                 // Implement email invitation logic
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton.icon(
-              icon: Icon(Icons.sms),
-              label: Text('Invite via SMS'),
+              icon: const Icon(Icons.sms),
+              label: const Text('Invite via SMS'),
               onPressed: () {
                 // Implement SMS invitation logic
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton.icon(
-              icon: Icon(Icons.share),
-              label: Text('Share on Social Media'),
+              icon: const Icon(Icons.share),
+              label: const Text('Share on Social Media'),
               onPressed: () {
                 // Implement social media sharing logic
               },

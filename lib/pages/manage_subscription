@@ -37,7 +37,7 @@ class ManageSubscriptionPage extends StatelessWidget {
                 // Add logic to cancel subscription
               },
               child: Text('Cancel Subscription'),
-              style: ElevatedButton.styleFrom(primary: Colors.red),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red), // Updated
             ),
           ],
         ),

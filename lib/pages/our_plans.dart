@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class OurPlansPage extends StatelessWidget {
+  const OurPlansPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Our Plans'),
+        title: const Text('Our Plans'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

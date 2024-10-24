@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class HelpPage extends StatelessWidget {
+  const HelpPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Help & Support'),
+        title: const Text('Help & Support'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
-        children: [
+        padding: const EdgeInsets.all(16),
+        children: const [
           ListTile(
             title: Text('How to upload an audio file'),
             subtitle: Text(
