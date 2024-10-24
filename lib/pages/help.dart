@@ -5,13 +5,29 @@ class HelpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Help'),
+        title: Text('Help & Support'),
       ),
-      body: const Center(
-        child: Text(
-          'Help and FAQs',
-          style: TextStyle(fontSize: 24),
-        ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          ListTile(
+            title: Text('How to upload an audio file'),
+            subtitle: Text(
+                'Step-by-step guide on uploading audio files for transcription.'),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Understanding transcription formats'),
+            subtitle: Text(
+                'Details on available transcription formats (e.g., plain text, JSON).'),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Contact Support'),
+            subtitle: Text(
+                'Email: support@transcribeapp.com\nPhone: +1 800 123 4567'),
+          ),
+        ],
       ),
     );
   }
