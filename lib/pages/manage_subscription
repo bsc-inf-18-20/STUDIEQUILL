@@ -7,10 +7,39 @@ class ManageSubscriptionPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Manage Subscription'),
       ),
-      body: Center(
-        child: Text(
-          'Manage your subscription here.',
-          style: TextStyle(fontSize: 24),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('Current Plan: Premium'),
+              subtitle: Text('Renews on: November 15, 2024'),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  // Add upgrade or manage plan logic
+                },
+                child: Text('Upgrade'),
+              ),
+            ),
+            ListTile(
+              title: Text('Billing Details'),
+              subtitle: Text('Card ending in 1234'),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  // Add billing management logic
+                },
+                child: Text('Update'),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Add logic to cancel subscription
+              },
+              child: Text('Cancel Subscription'),
+              style: ElevatedButton.styleFrom(primary: Colors.red),
+            ),
+          ],
         ),
       ),
     );
