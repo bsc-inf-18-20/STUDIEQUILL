@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/files_page.dart';
 import 'package:studie/pages/notes_page.dart';
-import 'package:studie/pages/pickfile_page.dart';
 import 'package:studie/pages/workspace_page.dart';
 import 'records_page.dart';
 import 'settings_page.dart';
