@@ -41,7 +41,7 @@ class SettingsPage extends StatelessWidget {
                       () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => OurPlansPage()),
+                      MaterialPageRoute(builder: (context) => const OurPlansPage()),
                     );
                   }),
                   _buildSettingOption(
@@ -55,27 +55,27 @@ class SettingsPage extends StatelessWidget {
                   _buildSettingOption('Help', Icons.help, context, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HelpPage()),
+                      MaterialPageRoute(builder: (context) => const HelpPage()),
                     );
                   }),
                   _buildSettingOption(
                       'Invite Friends', Icons.person_add, context, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => InvitePage()),
+                      MaterialPageRoute(builder: (context) => const InvitePage()),
                     );
                   }),
                   _buildSettingOption('Like or Rate Us', Icons.star, context,
                       () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LikeRateUsPage()),
+                      MaterialPageRoute(builder: (context) => const LikeRateUsPage()),
                     );
                   }),
                   _buildSettingOption('About Us', Icons.info, context, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AboutUsPage()),
+                      MaterialPageRoute(builder: (context) => const AboutUsPage()),
                     );
                   }),
                 ],

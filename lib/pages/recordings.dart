@@ -7,8 +7,8 @@ class RecordsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Records')),
-      body: const Center(child: Text('This is the Records Page')),
+      appBar: AppBar(title: const Text('Recordings')),
+      body: const Center(child: Text('This is the Recordings Page')),
     );
   }
 }

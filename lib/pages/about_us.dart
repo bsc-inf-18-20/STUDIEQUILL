@@ -14,7 +14,7 @@ class AboutUsPage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'About TranscribeApp',
+              'About StudieQUill',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
@@ -25,7 +25,7 @@ class AboutUsPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Contact Us: support@transcribeapp.com',
+              'Contact Us: studiequill@gmail.com',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/files_page.dart';
 import 'package:studie/pages/notes_page.dart';
+import 'package:studie/pages/pickfile_page.dart';
 import 'package:studie/pages/workspace_page.dart';
-import 'records_page.dart';
+import 'recordings.dart';
 import 'settings_page.dart';
+import 'package:studie/pages/audio_text.dart';
 
 class HomePage extends StatefulWidget {
   final bool isDarkMode;
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.mic),
-            label: 'Records',
+            label: 'Recordings',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.folder),
@@ -108,9 +110,9 @@ class _HomePageState extends State<HomePage> {
         mainAxisSpacing: 16.0,
         children: [
           _buildRoundedBox('Record', 'and transcribe', Icons.mic,
-              _colorScheme['record']!, context, const RecordsPage()),
-          // _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
-          //     _colorScheme['file']!, context, const PickFilePage()),
+              _colorScheme['record']!, context, const AudioText()),
+          _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
+              _colorScheme['file']!, context, const PickFilePage()),
           _buildRoundedBox('From URL', 'From You Tube Or Drive', Icons.link,
               _colorScheme['url']!, context, const NotesPage()),
           _buildRoundedBox('Share File', 'From WhatsApp', Icons.share,

@@ -26,8 +26,8 @@ class HelpPage extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text('Contact Support'),
-            subtitle: Text(
-                'Email: support@transcribeapp.com\nPhone: +1 800 123 4567'),
+            subtitle:
+                Text('Email: studiequill@gmail.com\nPhone: +265 99 84 84 144'),
           ),
         ],
       ),
