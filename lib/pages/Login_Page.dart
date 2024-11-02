@@ -7,6 +7,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -66,10 +67,10 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Login',
+          'STUDIE APP',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color.fromARGB(255, 44, 133, 8),
+        backgroundColor: const Color.fromARGB(255, 103, 58, 182),
       ),
       body: Center(
         child: Padding(
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 44, 133, 8),
+                      color: Color.fromARGB(255, 103, 58, 182),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -98,7 +99,15 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailController,
                     decoration: const InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Color.fromARGB(
+                          255,
+                          103,
+                          58,
+                          182,
+                        ),
+                      ),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -108,7 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: Icon(Icons.lock,
+                          color: Color.fromARGB(255, 103, 58, 182)),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -119,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(255, 44, 133, 8),
+                                const Color.fromARGB(255, 103, 58, 182),
                             padding: const EdgeInsets.symmetric(horizontal: 50),
                           ),
                           child: const Text(
@@ -138,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       'Don\'t have an account? Sign Up',
-                      style: TextStyle(color: Colors.deepPurple),
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 103, 58, 182)),
                     ),
                   ),
                 ],
