@@ -264,7 +264,7 @@ class _AudioTextState extends State<AudioText> {
         _speech.listen(
           onResult: (result) => setState(() {
             _text = result.recognizedWords;
-            _accumulatedText += ' ' + result.recognizedWords;
+            _accumulatedText += ' ${result.recognizedWords}';
           }),
         );
       } else {
@@ -290,7 +290,7 @@ class _AudioTextState extends State<AudioText> {
       _speech.listen(
         onResult: (result) => setState(() {
           _text = result.recognizedWords;
-          _accumulatedText += ' ' + result.recognizedWords;
+          _accumulatedText += ' ${result.recognizedWords}';
         }),
       );
     });
@@ -372,9 +372,10 @@ class _AudioTextState extends State<AudioText> {
             children: <Widget>[
               FloatingActionButton(
                 onPressed: _listen,
-                child: Icon(_isListening ? Icons.mic : Icons.mic_none),
-                backgroundColor:
-                    const Color(0xFF337C70), // Change mic button color
+                backgroundColor: const Color(0xFF337C70),
+                child: Icon(_isListening
+                    ? Icons.mic
+                    : Icons.mic_none), // Change mic button color
               ),
               const SizedBox(height: 16.0),
               if (_isListening)
@@ -402,13 +403,13 @@ class _AudioTextState extends State<AudioText> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _saveText,
-                child: const Text('Save'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(
                       0xFF337C70), // Change save button background color
                   foregroundColor:
                       Colors.white, // Change save button text color
                 ),
+                child: const Text('Save'),
               ),
             ],
           ),

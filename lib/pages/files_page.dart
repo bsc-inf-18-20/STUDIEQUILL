@@ -61,7 +61,7 @@ class _FilesPageState extends State<FilesPage> {
               await File(path).writeAsString(editedText);
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Transcription updated')),
+                const SnackBar(content: Text('Transcription updated')),
               );
               _loadFiles(); // Reload files to reflect changes
             },

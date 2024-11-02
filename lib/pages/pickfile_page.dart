@@ -154,7 +154,7 @@ class PickFilePage extends StatelessWidget {
   Future<String> _transcribeAudioFile(File audioFile) async {
     // Here you would normally call your transcription service
     // For this example, we're simulating a delay and returning a dummy transcription
-    await Future.delayed(Duration(seconds: 2)); // Simulating a delay
+    await Future.delayed(const Duration(seconds: 2)); // Simulating a delay
     return "This is a simulated transcription of the audio file."; // Simulated result
   }
 

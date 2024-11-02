@@ -47,12 +47,12 @@ class Mytexts extends StatelessWidget {
   final IconData? icon; // Optional icon parameter
 
   const Mytexts({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
     this.icon, // Initialize the icon parameter
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

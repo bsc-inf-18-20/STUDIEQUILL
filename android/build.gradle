@@ -1,3 +1,47 @@
+
+// buildscript{
+//     repositories{
+//         google()
+//         jcenter()
+//     }
+//     dependecies{
+//          class path'com.google.gms.google-services:4.4.2' 
+//     }
+// }
+
+
+// allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+// }
+
+// rootProject.buildDir = "../build"
+// subprojects {
+//     project.buildDir = "${rootProject.buildDir}/${project.name}"
+// }
+// subprojects {
+//     project.evaluationDependsOn(":app")
+// }
+
+// tasks.register("clean", Delete) {
+//     delete rootProject.buildDir
+// }
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {  
+        classpath 'com.android.tools.build:gradle:7.0.4'// Fixed spelling from "dependecies" to "dependencies"
+        classpath 'com.google.gms:google-services:4.4.2' 
+
+        // Fixed space in classpath declaration
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,10 +50,9 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 

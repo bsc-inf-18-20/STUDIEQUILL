@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231706507779",
+    "project_id": "studie-9c94c",
+    "storage_bucket": "studie-9c94c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231706507779:android:222e2bac7b909968baec36",
+        "android_client_info": {
+          "package_name": "com.example.studie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3vKaH2cN4wiz_6jGpxaAnULrPri6-mK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
