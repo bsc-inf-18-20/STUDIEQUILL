@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:studie/pages/HomePage.dart'; // Make sure this path is correct
+import 'package:studie/pages/HomePage.dart';
+// Make sure this path is correct
 import 'package:studie/pages/Sign_Up.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _isDarkMode = false; // Example variable to track dark mode state
+  bool _isDarkMode = false;
 
   Future<void> _login() async {
     setState(() {
@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
         const SnackBar(content: Text('Login successful!')),
       );
 
-      // Navigate to the home page after successful login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomePage(
@@ -101,12 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Email',
                       prefixIcon: Icon(
                         Icons.email,
-                        color: Color.fromARGB(
-                          255,
-                          103,
-                          58,
-                          182,
-                        ),
+                        color: Color.fromARGB(255, 103, 58, 182),
                       ),
                       border: OutlineInputBorder(),
                     ),
@@ -117,8 +111,10 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock,
-                          color: Color.fromARGB(255, 103, 58, 182)),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Color.fromARGB(255, 103, 58, 182),
+                      ),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -138,6 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                   const SizedBox(height: 10),
+                  // Different color for "Don't have an account?"
+                  const Text(
+                    'Don\'t have an account? ',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -147,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                     child: const Text(
-                      'Don\'t have an account? Sign Up',
+                      'Sign Up',
                       style:
                           TextStyle(color: Color.fromARGB(255, 103, 58, 182)),
                     ),

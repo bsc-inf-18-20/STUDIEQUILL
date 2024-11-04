@@ -43,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     } on FirebaseAuthException catch (e) {
       String message = 'An error occurred, please try again';
@@ -162,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           onPressed: _signUp,
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(255, 44, 133, 8),
+                                const Color.fromARGB(255, 103, 58, 182),
                             padding: const EdgeInsets.symmetric(horizontal: 50),
                           ),
                           child: const Text(
@@ -171,19 +171,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                   const SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Already have an account? Log in.',
-                      style: TextStyle(color: Colors.deepPurple),
-                    ),
-                  ),
                 ],
               ),
             ),

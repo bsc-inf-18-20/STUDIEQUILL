@@ -142,6 +142,6 @@ flutter:
   uses-material-design: true
 
   # Declare your assets here
-  # assets:
-    # - assets/background.jpg
+  assets:
+     - assets/background.jpg
 #

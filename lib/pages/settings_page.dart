@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:studie/pages/log_out.dart';
 import 'package:studie/pages/manage_subscription';
-import 'our_plans.dart'; // Add your custom page imports
+
+import 'delete_account.dart'; // Import your delete account logic
+import 'our_plans.dart';
 import 'help.dart';
 import 'like_rate_us.dart';
 import 'about_us.dart';
 import 'invite.dart';
+import 'user_profile.dart'; // Import UserProfile
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
@@ -24,14 +28,12 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
-              'Settings',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            const UserProfile(),
+            const SizedBox(height: 20),
             SwitchListTile(
               title: const Text('Dark Mode'),
               value: isDarkMode,
-              onChanged: onThemeChange, // Calls the global theme toggle
+              onChanged: onThemeChange,
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -41,7 +43,8 @@ class SettingsPage extends StatelessWidget {
                       () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const OurPlansPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const OurPlansPage()),
                     );
                   }),
                   _buildSettingOption(
@@ -62,22 +65,33 @@ class SettingsPage extends StatelessWidget {
                       'Invite Friends', Icons.person_add, context, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvitePage()),
+                      MaterialPageRoute(
+                          builder: (context) => const InvitePage()),
                     );
                   }),
                   _buildSettingOption('Like or Rate Us', Icons.star, context,
                       () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LikeRateUsPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const LikeRateUsPage()),
                     );
                   }),
                   _buildSettingOption('About Us', Icons.info, context, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AboutUsPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const AboutUsPage()),
                     );
                   }),
+                  const SizedBox(height: 20), // Add spacing before buttons
+                  _buildSettingOption('Delete Account', Icons.delete, context,
+                      () {
+                    deleteAccount(context); // Use the imported function
+                  }, tileColor: Colors.red, textColor: Colors.white),
+                  _buildSettingOption('Logout', Icons.logout, context, () {
+                    logout(context); // Use the imported function
+                  }, tileColor: Colors.blue, textColor: Colors.white),
                 ],
               ),
             ),
@@ -88,13 +102,20 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget _buildSettingOption(
-      String title, IconData icon, BuildContext context, VoidCallback onTap) {
+    String title,
+    IconData icon,
+    BuildContext context,
+    VoidCallback onTap, {
+    Color tileColor = Colors.white,
+    Color textColor = Colors.black,
+  }) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
-        leading: Icon(icon),
-        title: Text(title),
-        onTap: onTap, // Pass the navigation logic
+        leading: Icon(icon, color: textColor),
+        title: Text(title, style: TextStyle(color: textColor)),
+        tileColor: tileColor,
+        onTap: onTap,
       ),
     );
   }

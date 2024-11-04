@@ -11,10 +11,14 @@ class HomePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChange;
 
-  const HomePage(
-      {super.key, required this.isDarkMode, required this.onThemeChange});
+  const HomePage({
+    super.key,
+    required this.isDarkMode,
+    required this.onThemeChange,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -23,10 +27,10 @@ class _HomePageState extends State<HomePage> {
 
   // Define a map of colors for easy customization
   final Map<String, Color> _colorScheme = {
-    'record': const Color.fromARGB(255, 51, 124, 112),
-    'file': const Color.fromARGB(255, 51, 124, 112),
-    'url': const Color.fromARGB(255, 51, 124, 112),
-    'share': const Color.fromARGB(255, 51, 124, 112),
+    'record': const Color(0xFF673AB6),
+    'file': const Color(0xFF673AB6),
+    'url': const Color(0xFF673AB6),
+    'share': const Color(0xFF673AB6),
   };
 
   // Method to handle bottom nav item taps and navigation
@@ -48,15 +52,13 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(builder: (context) => const FilesPage()),
         );
         break;
-
       case 3:
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => SettingsPage(
               isDarkMode: widget.isDarkMode,
-              onThemeChange:
-                  widget.onThemeChange, // Pass the callback to SettingsPage
+              onThemeChange: widget.onThemeChange,
             ),
           ),
         );
@@ -70,11 +72,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text(
+          "STUDIE APP",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              widget.onThemeChange(!widget.isDarkMode);
+            },
+          ),
+        ],
+        elevation: 0,
+        backgroundColor: _colorScheme['record'],
       ),
-      body: _buildHomePage(context), // Show Home Page for selection
+      body: _buildHomePage(context),
 
-      // Bottom navigation bar
+      // BottomNavigationBar without UserProfile widget
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -96,6 +114,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Settings',
           ),
         ],
+        selectedItemColor: _colorScheme['record'],
+        unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
       ),
     );
@@ -113,7 +133,7 @@ class _HomePageState extends State<HomePage> {
               _colorScheme['record']!, context, const AudioText()),
           _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
               _colorScheme['file']!, context, const PickFilePage()),
-          _buildRoundedBox('From URL', 'From You Tube Or Drive', Icons.link,
+          _buildRoundedBox('From URL', 'From YouTube', Icons.link,
               _colorScheme['url']!, context, const NotesPage()),
           _buildRoundedBox('Share File', 'From WhatsApp', Icons.share,
               _colorScheme['share']!, context, const WorkspacePage()),
@@ -136,28 +156,33 @@ class _HomePageState extends State<HomePage> {
           color: color.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: color),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(icon, size: 50, color: color),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
               ),
-            ),
-            const SizedBox(height: 5), // Space between title and subtitle
-            Text(
-              subtitle, // Display the subtitle
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color.fromARGB(255, 51, 124, 112),
+              const SizedBox(height: 5),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color.fromARGB(255, 51, 124, 112),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
