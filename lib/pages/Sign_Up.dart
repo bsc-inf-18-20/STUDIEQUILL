@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studie/pages/Login_Page.dart';
+import 'package:studie/pages/auth_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -10,7 +10,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService = AuthService();
   final _firstNameController = TextEditingController();
   final _surnameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -20,9 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _signUp() async {
     if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      _showSnackbar('Passwords do not match');
       return;
     }
 
@@ -31,29 +29,18 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      final user = await _authService.signUpWithEmailPassword(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Account created successfully. Please log in.'),
-        ),
-      );
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-    } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred, please try again';
-      if (e.code == 'email-already-in-use') {
-        message = 'The account already exists for that email.';
-      } else if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
+      if (user != null) {
+        _showSnackbar('Account created successfully. Please log in.');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+    } catch (e) {
+      _showSnackbar(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
@@ -61,121 +48,113 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Create New Account',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('Create New Account'),
         backgroundColor: const Color.fromARGB(255, 103, 58, 182),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Card(
-            elevation: 8,
-            color: Colors.white.withOpacity(0.9),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Create an Account',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 103, 58, 182),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _firstNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'First Name',
-                      prefixIcon: Icon(
-                        Icons.person,
-                        color: Color.fromARGB(255, 103, 58, 182),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _surnameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Surname',
-                      prefixIcon: Icon(
-                        Icons.person_outline,
-                        color: Color.fromARGB(255, 103, 58, 182),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: Color.fromARGB(255, 103, 58, 182),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        color: Color.fromARGB(255, 103, 58, 182),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        color: Color.fromARGB(255, 103, 58, 182),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  _isLoading
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: _signUp,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 103, 58, 182),
-                            padding: const EdgeInsets.symmetric(horizontal: 50),
-                          ),
-                          child: const Text(
-                            'Sign Up',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                  const SizedBox(height: 10),
-                ],
+          child: _buildSignUpForm(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignUpForm() {
+    return Card(
+      elevation: 8,
+      color: Colors.white.withOpacity(0.9),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Create an Account',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 103, 58, 182),
               ),
             ),
-          ),
+            const SizedBox(height: 20),
+            _buildTextField(
+              controller: _firstNameController,
+              label: 'First Name',
+              icon: Icons.person,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _surnameController,
+              label: 'Surname',
+              icon: Icons.person_outline,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _emailController,
+              label: 'Email',
+              icon: Icons.email,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _passwordController,
+              label: 'Password',
+              icon: Icons.lock,
+              obscureText: true,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _confirmPasswordController,
+              label: 'Confirm Password',
+              icon: Icons.lock_outline,
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _signUp,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 103, 58, 182),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                    ),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+            const SizedBox(height: 10),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool obscureText = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: const Color.fromARGB(255, 103, 58, 182)),
+        border: const OutlineInputBorder(),
       ),
     );
   }
