@@ -18,14 +18,12 @@ class HomePage extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  // Define a map of colors for easy customization
   final Map<String, Color> _colorScheme = {
     'record': const Color(0xFF673AB6),
     'file': const Color(0xFF673AB6),
@@ -33,45 +31,43 @@ class _HomePageState extends State<HomePage> {
     'share': const Color(0xFF673AB6),
   };
 
-  // Method to handle bottom nav item taps and navigation
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const RecordsPage()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const FilesPage()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SettingsPage(
-              isDarkMode: widget.isDarkMode,
-              onThemeChange: widget.onThemeChange,
-            ),
+  List<NavigationItem> get _navigationItems => [
+        const NavigationItem(
+            icon: Icons.home, label: 'Home', page: AudioText()),
+        const NavigationItem(
+            icon: Icons.mic, label: 'Recordings', page: RecordsPage()),
+        const NavigationItem(
+            icon: Icons.folder, label: 'Files', page: FilesPage()),
+        NavigationItem(
+          icon: Icons.settings,
+          label: 'Settings',
+          page: SettingsPage(
+            isDarkMode: widget.isDarkMode,
+            onThemeChange: widget.onThemeChange,
           ),
-        );
-        break;
-      default:
-        break;
+        ),
+      ];
+
+  void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+    if (index != 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => _navigationItems[index].page),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _buildAppBar(),
+      body: _buildHomePage(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  AppBar _buildAppBar() => AppBar(
         title: const Text(
           "STUDIE APP",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -82,109 +78,117 @@ class _HomePageState extends State<HomePage> {
               widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               color: Colors.white,
             ),
-            onPressed: () {
-              widget.onThemeChange(!widget.isDarkMode);
-            },
+            onPressed: () => widget.onThemeChange(!widget.isDarkMode),
           ),
         ],
-        elevation: 0,
         backgroundColor: _colorScheme['record'],
-      ),
-      body: _buildHomePage(context),
+      );
 
-      // BottomNavigationBar without UserProfile widget
-      bottomNavigationBar: BottomNavigationBar(
+  BottomNavigationBar _buildBottomNavigationBar() => BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mic),
-            label: 'Recordings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder),
-            label: 'Files',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
+        items: _navigationItems
+            .map((item) => BottomNavigationBarItem(
+                icon: Icon(item.icon), label: item.label))
+            .toList(),
         selectedItemColor: _colorScheme['record'],
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
-      ),
-    );
-  }
+      );
 
-  Widget _buildHomePage(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16.0,
-        mainAxisSpacing: 16.0,
-        children: [
-          _buildRoundedBox('Record', 'and transcribe', Icons.mic,
-              _colorScheme['record']!, context, const AudioText()),
-          _buildRoundedBox('Pick a File', 'Audio/Video File', Icons.file_copy,
-              _colorScheme['file']!, context, const PickFilePage()),
-          _buildRoundedBox('From URL', 'From YouTube', Icons.link,
-              _colorScheme['url']!, context, const NotesPage()),
-          _buildRoundedBox('Share File', 'From WhatsApp', Icons.share,
-              _colorScheme['share']!, context, const WorkspacePage()),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRoundedBox(String title, String subtitle, IconData icon,
-      Color color, BuildContext context, Widget page) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(20),
+  Widget _buildHomePage() => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+          children: _buildGridItems(),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(icon, size: 50, color: color),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: color,
+      );
+
+  List<Widget> _buildGridItems() => [
+        _buildGridItem(
+          title: 'Record',
+          subtitle: 'and transcribe',
+          icon: Icons.mic,
+          color: _colorScheme['record']!,
+          page: const AudioText(),
+        ),
+        _buildGridItem(
+          title: 'Pick a File',
+          subtitle: 'Audio/Video File',
+          icon: Icons.file_copy,
+          color: _colorScheme['file']!,
+          page: const PickFilePage(),
+        ),
+        _buildGridItem(
+          title: 'From URL',
+          subtitle: 'From YouTube',
+          icon: Icons.link,
+          color: _colorScheme['url']!,
+          page: const NotesPage(),
+        ),
+        _buildGridItem(
+          title: 'Share File',
+          subtitle: 'From WhatsApp',
+          icon: Icons.share,
+          color: _colorScheme['share']!,
+          page: const WorkspacePage(),
+        ),
+      ];
+
+  Widget _buildGridItem({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required Widget page,
+  }) =>
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => page));
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 50, color: color),
+                const SizedBox(height: 10),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold, color: color),
                 ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 51, 124, 112),
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 14, color: Color.fromARGB(255, 51, 124, 112)),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
+}
+
+//  encapsulating navigation item properties
+class NavigationItem {
+  final IconData icon;
+  final String label;
+  final Widget page;
+
+  const NavigationItem({
+    required this.icon,
+    required this.label,
+    required this.page,
+  });
 }

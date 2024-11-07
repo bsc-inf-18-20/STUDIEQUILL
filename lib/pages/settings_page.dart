@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/log_out.dart';
 import 'package:studie/pages/manage_subscription';
-
 import 'delete_account.dart'; // Import your delete account logic
 import 'our_plans.dart';
 import 'help.dart';

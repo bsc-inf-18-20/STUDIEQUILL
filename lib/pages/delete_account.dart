@@ -12,17 +12,38 @@ Future<void> deleteAccount(BuildContext context) async {
           .collection('users')
           .doc(user.uid)
           .delete();
+      print("User data deleted from Firestore.");
 
       // Delete the user account
       await user.delete();
+      print("User account deleted.");
+
+      // Sign out the user after deletion
+      await FirebaseAuth.instance.signOut();
+      print("User signed out.");
 
       // Navigate to login or home page after deletion
       Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
-      // Handle error
+      // Print out the error for debugging
+      print("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting account: $e')),
       );
     }
+  } else {
+    print("No user is currently signed in.");
   }
 }
+
+
+
+// rules_version = '2';
+
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /{document=**} {
+//       allow read, write: if false;
+//     }
+//   }
+// }
