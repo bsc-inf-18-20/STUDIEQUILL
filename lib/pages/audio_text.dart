@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:studie/pages/files_page.dart';
+import 'package:studie/pages/filestorage_service.dart';
 import 'dart:async';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'files_page.dart'; // Import the FilesPage
+
+import 'package:studie/pages/trancription_service.dart';
 
 class AudioText extends StatefulWidget {
   const AudioText({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _AudioTextState createState() => _AudioTextState();
 }
 
 class _AudioTextState extends State<AudioText> {
-  late stt.SpeechToText _speech;
+  final TranscriptionService _transcriptionService = TranscriptionService();
+  final FileStorageService _fileStorageService = FileStorageService();
+
   bool _isListening = false;
   String _text = 'Tap the button and start speaking';
   String _accumulatedText = '';
@@ -24,74 +25,56 @@ class _AudioTextState extends State<AudioText> {
   @override
   void initState() {
     super.initState();
-    _speech = stt.SpeechToText();
+    _transcriptionService.initialize(
+      onResult: _onSpeechResult,
+      onError: _onSpeechError,
+    );
   }
 
-  void _listen() async {
+  void _onSpeechResult(String recognizedWords) {
+    setState(() {
+      _text = recognizedWords;
+      _accumulatedText += ' $recognizedWords';
+    });
+  }
+
+  void _onSpeechError(String errorMessage) {
+    setState(() {
+      _text = "Error: $errorMessage";
+      _isListening = false;
+      _stopTimer();
+    });
+  }
+
+  void _listen() {
     if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (status) {
-          print('Status: $status');
-          if (status == 'done' && _isListening) {
-            _restartListening();
-          }
-        },
-        onError: (error) {
-          print('Error: $error');
-          setState(() {
-            _isListening = false; // updating listening status on error
-            _text = "Error: ${error.errorMsg}";
-            _stopTimer();
-          });
-        },
-      );
-      if (available) {
-        setState(() {
-          _isListening = true;
-          _elapsedTime = Duration.zero;
-          _startTimer();
-        });
-        _speech.listen(
-          onResult: (result) => setState(() {
-            _text = result.recognizedWords;
-            _accumulatedText += ' ${result.recognizedWords}';
-          }),
-        );
-      } else {
-        setState(() {
-          _isListening = false;
-          _text = "Speech recognition not available";
-          _stopTimer();
-        });
-        _speech.stop();
-      }
+      _startListening();
     } else {
-      setState(() {
-        _isListening = false;
-        _stopTimer();
-      });
-      _speech.stop();
+      _stopListening();
     }
   }
 
-  void _restartListening() {
-    _speech.stop();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _speech.listen(
-        onResult: (result) => setState(() {
-          _text = result.recognizedWords;
-          _accumulatedText += ' ${result.recognizedWords}';
-        }),
-      );
+  void _startListening() {
+    setState(() {
+      _isListening = true;
+      _elapsedTime = Duration.zero;
     });
+    _transcriptionService.startListening(_onSpeechResult);
+    _startTimer();
+  }
+
+  void _stopListening() {
+    setState(() => _isListening = false);
+    _transcriptionService.stopListening();
+    _stopTimer();
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime = Duration(seconds: _elapsedTime.inSeconds + 1);
-        if (_elapsedTime.inSeconds >= 0.5 * 60) {
-          _stopRecording();
+        if (_elapsedTime.inSeconds >= 30) {
+          _stopListening();
         }
       });
     });
@@ -101,33 +84,19 @@ class _AudioTextState extends State<AudioText> {
     _timer?.cancel();
   }
 
-  void _stopRecording() {
-    if (_isListening) {
-      setState(() {
-        _isListening = false;
-        _speech.stop();
-        _stopTimer();
-      });
-    }
-  }
-
-  void _saveText() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File(
-        '${directory.path}/transcription_${DateTime.now().millisecondsSinceEpoch}.txt');
-    await file.writeAsString(_accumulatedText);
+  Future<void> _saveText() async {
+    await _fileStorageService.saveText(_accumulatedText);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Transcribed text saved')),
     );
 
-    // Reset for new recording
     setState(() {
-      _text = 'Tap the button and start speaking'; // Reset the text
-      _accumulatedText = ''; // Reset accumulated text
-      _isListening = false; // Stop listening state
-      _elapsedTime = Duration.zero; // Reset elapsed time
-      _stopTimer(); // Stop any active timers
+      _text = 'Tap the button and start speaking';
+      _accumulatedText = '';
+      _elapsedTime = Duration.zero;
+      _isListening = false;
     });
+    _stopTimer();
   }
 
   @override
@@ -162,40 +131,37 @@ class _AudioTextState extends State<AudioText> {
               FloatingActionButton(
                 onPressed: _listen,
                 backgroundColor: const Color(0xFF337C70),
-                child: Icon(_isListening ? Icons.mic : Icons.mic_none,
-                    color: Colors.white), // changing mic button color
+                child: Icon(
+                  _isListening ? Icons.mic : Icons.mic_none,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 16.0),
               if (_isListening)
                 Text(
                   'Recording Time: ${_elapsedTime.inMinutes}:${(_elapsedTime.inSeconds % 60).toString().padLeft(2, '0')}',
-                  style: const TextStyle(
-                      fontSize: 20,
-                      color: Color(0xFFA3A3A3)), // changing text color
+                  style:
+                      const TextStyle(fontSize: 20, color: Color(0xFFA3A3A3)),
                 ),
               const SizedBox(height: 16.0),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: const Color(
-                      0xFFF0EFEF), // Changing text field background color
+                  color: const Color(0xFFF0EFEF),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Text(
                   _text,
-                  style: const TextStyle(
-                      fontSize: 24,
-                      color: Color(0xFF929191)), // Changing text color
+                  style:
+                      const TextStyle(fontSize: 24, color: Color(0xFF929191)),
                 ),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _saveText,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(
-                      0xFF337C70), // changing save button background color
-                  foregroundColor:
-                      Colors.white, // changing save button text color
+                  backgroundColor: const Color(0xFF337C70),
+                  foregroundColor: Colors.white,
                 ),
                 child: const Text('Save'),
               ),
