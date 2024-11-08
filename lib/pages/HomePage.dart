@@ -7,6 +7,38 @@ import 'recordings.dart';
 import 'settings_page.dart';
 import 'package:studie/pages/audio_text.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDarkMode = false;
+
+  void toggleTheme(bool value) {
+    setState(() {
+      isDarkMode = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: HomePage(
+        isDarkMode: isDarkMode,
+        onThemeChange: toggleTheme,
+      ),
+    );
+  }
+}
+
 class HomePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChange;
@@ -119,7 +151,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: 'Audio/Video File',
           icon: Icons.file_copy,
           color: _colorScheme['file']!,
-          page: const PickFilePage(),
+          page: PickFilePage(),
         ),
         _buildGridItem(
           title: 'From URL',
@@ -180,7 +212,7 @@ class _HomePageState extends State<HomePage> {
       );
 }
 
-//  encapsulating navigation item properties
+// Encapsulating navigation item properties
 class NavigationItem {
   final IconData icon;
   final String label;

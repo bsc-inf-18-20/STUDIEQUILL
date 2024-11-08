@@ -15,9 +15,14 @@ class SettingsPage extends StatelessWidget {
 
   const SettingsPage({
     super.key,
-    required this.isDarkMode,
-    required this.onThemeChange,
+    this.isDarkMode = false, // Default value for isDarkMode
+    this.onThemeChange = _defaultThemeChange, // Default no-op function
   });
+
+  // Default function for onThemeChange (does nothing)
+  static void _defaultThemeChange(bool value) {
+    print('Theme change callback not provided');
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/Login_Page.dart';
 import 'package:studie/pages/auth_service.dart';
+import 'package:studie/pages/Login_Page.dart';
+import 'package:studie/pages/validation_service.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  final AuthService authService;
+  final ValidationService validationService;
+
+  const SignUpPage({
+    super.key,
+    required this.authService,
+    required this.validationService,
+  });
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final AuthService _authService = AuthService();
   final _firstNameController = TextEditingController();
   final _surnameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -19,20 +26,30 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isLoading = false;
 
   Future<void> _signUp() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      _showSnackbar('Passwords do not match');
+    final emailError =
+        widget.validationService.validateEmail(_emailController.text);
+    final passwordError =
+        widget.validationService.validatePassword(_passwordController.text);
+    final confirmPasswordError = widget.validationService.confirmPassword(
+      _passwordController.text,
+      _confirmPasswordController.text,
+    );
+
+    if (emailError != null ||
+        passwordError != null ||
+        confirmPasswordError != null) {
+      _showSnackbar(emailError ?? passwordError ?? confirmPasswordError!);
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     try {
-      final user = await _authService.signUpWithEmailPassword(
+      final user = await widget.authService.signUpWithEmailPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
+
       if (user != null) {
         _showSnackbar('Account created successfully. Please log in.');
         Navigator.of(context).pushReplacement(
@@ -42,9 +59,7 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       _showSnackbar(e.toString());
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isLoading = false);
     }
   }
 
@@ -90,18 +105,6 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildTextField(
-              controller: _firstNameController,
-              label: 'First Name',
-              icon: Icons.person,
-            ),
-            const SizedBox(height: 16),
-            _buildTextField(
-              controller: _surnameController,
-              label: 'Surname',
-              icon: Icons.person_outline,
-            ),
-            const SizedBox(height: 16),
             _buildTextField(
               controller: _emailController,
               label: 'Email',

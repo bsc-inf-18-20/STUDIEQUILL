@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:studie/pages/HomePage.dart';
-// Make sure this path is correct
 import 'package:studie/pages/Sign_Up.dart';
+import 'package:studie/pages/HomePage.dart';
+import 'login_service.dart';
+import 'auth_service.dart';
+import 'validation_service.dart'; // Make sure to import ValidationService
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,52 +13,56 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _isDarkMode = false;
+  String? _errorMessage;
+
+  // Instantiate the LoginService
+  final LoginService _loginService = LoginService();
+
+  // Instantiate AuthService and ValidationService to pass to SignUpPage
+  final AuthService _authService = AuthService();
+  final ValidationService _validationService = ValidationService();
 
   Future<void> _login() async {
     setState(() {
       _isLoading = true;
+      _errorMessage = null; // Reset error message before new login attempt
     });
 
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
+    String? error = await _loginService.login(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
 
+    setState(() {
+      _isLoading = false;
+      _errorMessage = error;
+    });
+
+    if (error == null) {
+      // Successful login
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login successful!')),
       );
 
+      // Pass `isDarkMode` and `onThemeChange` to `HomePage`
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomePage(
-            isDarkMode: _isDarkMode,
+            isDarkMode: false, // Default theme, replace with actual state
             onThemeChange: (value) {
-              setState(() {
-                _isDarkMode = value;
-              });
+              // You can add a method here to change the theme in your app
             },
           ),
         ),
       );
-    } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred, please try again';
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided for that user.';
-      }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error)),
+      );
     }
   }
 
@@ -134,7 +139,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                   const SizedBox(height: 10),
-                  // Different color for "Don't have an account?"
+                  if (_errorMessage != null)
+                    Text(
+                      _errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  const SizedBox(height: 10),
                   const Text(
                     'Don\'t have an account? ',
                     style: TextStyle(color: Colors.grey),
@@ -143,7 +153,11 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const SignUpPage(),
+                          builder: (context) => SignUpPage(
+                            authService: _authService, // Pass authService
+                            validationService:
+                                _validationService, // Pass validationService
+                          ),
                         ),
                       );
                     },
