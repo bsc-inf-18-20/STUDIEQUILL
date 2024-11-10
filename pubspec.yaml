@@ -117,12 +117,16 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.5.2
-
 dependencies:
   flutter:
     sdk: flutter
   flutter_test:
     sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.19.0
+
   cupertino_icons: ^1.0.8
   file_picker: ^5.0.0
   flutter_sound: ^9.2.13
@@ -131,6 +135,7 @@ dependencies:
   speech_to_text: ^7.0.0
   googleapis: ^8.0.0
   googleapis_auth: ^1.0.0
+  google_speech: ^2.0.0
   http: ^0.13.0
   flutter_lints: ^4.0.0
 
@@ -138,10 +143,13 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
 
+
 flutter:
   uses-material-design: true
 
   # Declare your assets here
   assets:
      - assets/background.jpg
+     - assets/lang/en.json
+     - assets/lang/ny.json
 #

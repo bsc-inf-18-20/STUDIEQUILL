@@ -3,8 +3,9 @@
 class ValidationService {
   String? validateEmail(String email) {
     if (email.isEmpty) return 'Email is required';
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email))
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
       return 'Enter a valid email';
+    }
     return null;
   }
 

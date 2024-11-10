@@ -23,9 +23,9 @@ class TranscriptionService {
     );
   }
 
-  void startListening(Function(String) onResult) {
+  Future<void> startListening(Function(String) onResult) async {
     _isListening = true;
-    _speech.listen(
+    await _speech.listen(
       onResult: (result) {
         onResult(result.recognizedWords);
       },

@@ -13,14 +13,14 @@ class AboutUsPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const AboutSection(
+            AboutSection(
               title: 'About StudieQUill',
               content:
                   'TranscribeApp is a state-of-the-art audio transcription platform designed to make converting audio to text easy and efficient. '
                   'Our mission is to provide users with high-quality transcription services powered by advanced AI technology.',
             ),
-            const SizedBox(height: 20),
-            const AboutSection(
+            SizedBox(height: 20),
+            AboutSection(
               title: 'Contact Us',
               content: 'studiequill@gmail.com',
               isBold: true,
