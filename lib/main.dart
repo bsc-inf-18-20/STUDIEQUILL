@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:studie/app_localizations.dart';
-import 'package:studie/pages/language_selection.dart';
+import 'package:studie/pages/localisation/app_localizations.dart';
+import 'package:studie/pages/localisation/language_selection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

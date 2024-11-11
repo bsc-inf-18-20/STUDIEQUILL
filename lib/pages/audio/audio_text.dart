@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/files_page.dart';
-import 'package:studie/pages/filestorage_service.dart';
+import 'package:studie/pages/home/files_page.dart';
+import 'package:studie/pages/home/filestorage_service.dart';
 import 'dart:async';
 
-import 'package:studie/pages/trancription_service.dart';
+import 'package:studie/pages/audio/trancription_service.dart';
 
 class AudioText extends StatefulWidget {
   const AudioText({super.key});

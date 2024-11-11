@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/plan.dart';
+import 'package:studie/pages/settings/plan.dart';
 
 class OurPlansPage extends StatelessWidget {
   const OurPlansPage({super.key});
