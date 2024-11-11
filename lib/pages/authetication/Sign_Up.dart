@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/auth_service.dart';
-import 'package:studie/pages/Login_Page.dart';
-import 'package:studie/pages/validation_service.dart';
+import 'package:studie/pages/authetication/auth_service.dart';
+import 'package:studie/pages/authetication/Login_Page.dart';
+import 'package:studie/pages/authetication/validation_service.dart';
 
 class SignUpPage extends StatefulWidget {
   final AuthService authService;

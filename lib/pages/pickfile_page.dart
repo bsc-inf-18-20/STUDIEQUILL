@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:studie/pages/file_picker_service.dart';
+import 'package:studie/pages/home/file_picker_service.dart';
 
 class PickFilePage extends StatelessWidget {
   PickFilePage({super.key});

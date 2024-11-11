@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/files_page.dart';
+import 'package:studie/pages/home/files_page.dart';
 import 'package:studie/pages/notes_page.dart';
 import 'package:studie/pages/pickfile_page.dart';
-import 'package:studie/pages/workspace_page.dart';
-import 'recordings.dart';
-import 'settings_page.dart';
-import 'package:studie/pages/audio_text.dart';
+import 'package:studie/pages/home/workspace_page.dart';
+import '../audio/recordings.dart';
+import '../settings/settings_page.dart';
+import 'package:studie/pages/audio/audio_text.dart';
 
 void main() {
   runApp(const MyApp());
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar() => AppBar(
         title: const Text(
-          "STUDIE APP",
+          "Studiequil",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [

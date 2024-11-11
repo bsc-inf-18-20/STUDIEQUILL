@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/main.dart';
-import 'package:studie/pages/Login_Page.dart';
+import 'package:studie/pages/authetication/Login_Page.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
