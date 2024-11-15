@@ -2,43 +2,52 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:studie/pages/home/file_picker_service.dart';
+class PickFilePage extends StatefulWidget {
+  const PickFilePage({super.key});
 
-class PickFilePage extends StatelessWidget {
-  PickFilePage({super.key});
+  @override
+  State<PickFilePage> createState() => _PickFilePageState();
+}
 
-  // Create an instance of the FilePickerService
-  final FilePickerService _filePickerService = FilePickerService();
+class _PickFilePageState extends State<PickFilePage> {
+  File? _selectedAudioFile;
 
-  Future<void> _pickAudioFile(BuildContext context) async {
-    // Request permission to access external storage
-    if (await _filePickerService.requestStoragePermission()) {
-      PlatformFile? file = await _filePickerService.pickAudioFile();
+  // Method to pick an audio file
+  Future<void> _pickAudioFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3', 'wav', 'm4a'], // Restrict to audio files
+      );
 
-      if (file != null) {
-        // The user picked a file
-        String? path = file.path;
-
-        if (path != null) {
-          // Handle the file further (e.g., transcribing)
-          File audioFile = File(path);
-          String transcription =
-              await _filePickerService.transcribeAudioFile(audioFile);
-          // Show the transcription result
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Transcription: $transcription')),
-          );
-        }
+      if (result != null) {
+        // File selected
+        setState(() {
+          _selectedAudioFile = File(result.files.single.path!);
+        });
       } else {
-        // The user canceled the file picker
+        // User canceled the picker
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No file selected')),
         );
       }
-    } else {
-      // Permission was denied
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Storage permission denied')),
+        SnackBar(content: Text('Error picking file: $e')),
+      );
+    }
+  }
+
+  // Method to transcribe the selected file
+  Future<void> _transcribeFile() async {
+    if (_selectedAudioFile != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Transcribing file...')),
+      );
+      // Here you would call your transcription logic/API.
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No file selected for transcription')),
       );
     }
   }
@@ -47,22 +56,89 @@ class PickFilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick an Audio File'),
+        title: const Text('Audio File Picker'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Pick an audio file to upload and transcribe',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _pickAudioFile(context),
-              child: const Text('Pick Audio File'),
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Center(
+          child: _selectedAudioFile == null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.music_note,
+                      size: 80,
+                      color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Select an audio file to get started',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: _pickAudioFile,
+                      icon: const Icon(Icons.file_upload),
+                      label: const Text('Pick Audio File'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline,
+                      size: 80,
+                      color: Color(0xFF673AB6),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'File Selected Successfully',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF673AB6),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey[200],
+                      ),
+                      child: Text(
+                        _selectedAudioFile!.path,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: _transcribeFile,
+                      icon: const Icon(Icons.translate),
+                      label: const Text(
+                        'Transcribe the File',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF673AB6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
