@@ -2,7 +2,6 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class TranscriptionService {
   final stt.SpeechToText _speech = stt.SpeechToText();
-
   bool _isListening = false;
 
   bool get isListening => _isListening;
@@ -27,7 +26,10 @@ class TranscriptionService {
     _isListening = true;
     await _speech.listen(
       onResult: (result) {
-        onResult(result.recognizedWords);
+        if (result.finalResult) {
+          // Only process final results
+          onResult(result.recognizedWords);
+        }
       },
     );
   }

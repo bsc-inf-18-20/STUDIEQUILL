@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/localisation/app_localizations.dart';
-import 'package:studie/pages/authetication/Sign_Up.dart';
+import 'package:studie/pages/authetication/sign%20up/Sign_Up.dart';
 import 'package:studie/pages/home/HomePage.dart';
 import 'login_service.dart';
 import 'auth_service.dart';

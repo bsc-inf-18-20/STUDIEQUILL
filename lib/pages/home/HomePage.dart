@@ -63,17 +63,27 @@ class _HomePageState extends State<HomePage> {
     'share': const Color(0xFF673AB6),
   };
 
+  // Lazy initialize pages only when accessed
+  final List<Widget> _pages =
+      List<Widget>.filled(4, Container(), growable: false);
+
   List<NavigationItem> get _navigationItems => [
-        const NavigationItem(
-            icon: Icons.home, label: 'Home', page: AudioText()),
-        const NavigationItem(
-            icon: Icons.mic, label: 'Recordings', page: RecordsPage()),
-        const NavigationItem(
-            icon: Icons.folder, label: 'Files', page: FilesPage()),
+        NavigationItem(
+            icon: Icons.home,
+            label: 'Home',
+            pageBuilder: () => const AudioText()),
+        NavigationItem(
+            icon: Icons.mic,
+            label: 'Recordings',
+            pageBuilder: () => const RecordsPage()),
+        NavigationItem(
+            icon: Icons.folder,
+            label: 'Files',
+            pageBuilder: () => const FilesPage()),
         NavigationItem(
           icon: Icons.settings,
           label: 'Settings',
-          page: SettingsPage(
+          pageBuilder: () => SettingsPage(
             isDarkMode: widget.isDarkMode,
             onThemeChange: widget.onThemeChange,
           ),
@@ -81,11 +91,18 @@ class _HomePageState extends State<HomePage> {
       ];
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return; // Prevents unnecessary rebuilds
     setState(() => _selectedIndex = index);
+
+    if (_pages[index] == Container()) {
+      _pages[index] = _navigationItems[index].pageBuilder();
+    }
+
+    // Navigate only if the page is not the main page
     if (index != 0) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => _navigationItems[index].page),
+        MaterialPageRoute(builder: (context) => _pages[index]),
       );
     }
   }
@@ -216,11 +233,11 @@ class _HomePageState extends State<HomePage> {
 class NavigationItem {
   final IconData icon;
   final String label;
-  final Widget page;
+  final Widget Function() pageBuilder;
 
   const NavigationItem({
     required this.icon,
     required this.label,
-    required this.page,
+    required this.pageBuilder,
   });
 }

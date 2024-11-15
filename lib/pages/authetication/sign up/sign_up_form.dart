@@ -1,66 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/authetication/auth_service.dart';
-import 'package:studie/pages/authetication/Login_Page.dart';
 import 'package:studie/pages/authetication/validation_service.dart';
+import 'sign_up_controller.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpForm extends StatefulWidget {
   final AuthService authService;
   final ValidationService validationService;
 
-  const SignUpPage({
-    super.key,
+  const SignUpForm({
+    Key? key,
     required this.authService,
     required this.validationService,
-  });
+  }) : super(key: key);
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  final _firstNameController = TextEditingController();
-  final _surnameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+class _SignUpFormState extends State<SignUpForm> {
+  late SignUpController _controller;
   bool _isLoading = false;
 
-  Future<void> _signUp() async {
-    final emailError =
-        widget.validationService.validateEmail(_emailController.text);
-    final passwordError =
-        widget.validationService.validatePassword(_passwordController.text);
-    final confirmPasswordError = widget.validationService.confirmPassword(
-      _passwordController.text,
-      _confirmPasswordController.text,
+  @override
+  void initState() {
+    super.initState();
+    _controller = SignUpController(
+      authService: widget.authService,
+      validationService: widget.validationService,
+      showSnackbar: _showSnackbar,
+      navigateToLogin: _navigateToLogin,
     );
+  }
 
-    if (emailError != null ||
-        passwordError != null ||
-        confirmPasswordError != null) {
-      _showSnackbar(emailError ?? passwordError ?? confirmPasswordError!);
-      return;
-    }
-
+  Future<void> _signUp() async {
     setState(() => _isLoading = true);
-
-    try {
-      final user = await widget.authService.signUpWithEmailPassword(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
-
-      if (user != null) {
-        _showSnackbar('Account created successfully. Please log in.');
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      }
-    } catch (e) {
-      _showSnackbar(e.toString());
-    } finally {
-      setState(() => _isLoading = false);
-    }
+    await _controller.signUp();
+    setState(() => _isLoading = false);
   }
 
   void _showSnackbar(String message) {
@@ -68,23 +43,12 @@ class _SignUpPageState extends State<SignUpPage> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create New Account'),
-        backgroundColor: const Color.fromARGB(255, 103, 58, 182),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: _buildSignUpForm(),
-        ),
-      ),
-    );
+  void _navigateToLogin() {
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
-  Widget _buildSignUpForm() {
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 8,
       color: Colors.white.withOpacity(0.9),
@@ -106,20 +70,20 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             const SizedBox(height: 20),
             _buildTextField(
-              controller: _emailController,
+              controller: _controller.emailController,
               label: 'Email',
               icon: Icons.email,
             ),
             const SizedBox(height: 16),
             _buildTextField(
-              controller: _passwordController,
+              controller: _controller.passwordController,
               label: 'Password',
               icon: Icons.lock,
               obscureText: true,
             ),
             const SizedBox(height: 16),
             _buildTextField(
-              controller: _confirmPasswordController,
+              controller: _controller.confirmPasswordController,
               label: 'Confirm Password',
               icon: Icons.lock_outline,
               obscureText: true,
@@ -138,7 +102,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -164,11 +127,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _surnameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }

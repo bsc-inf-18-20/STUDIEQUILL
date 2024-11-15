@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:studie/pages/home/files_page.dart';
 import 'package:studie/pages/home/filestorage_service.dart';
 import 'dart:async';
-
 import 'package:studie/pages/audio/trancription_service.dart';
 
 class AudioText extends StatefulWidget {
@@ -36,6 +35,10 @@ class _AudioTextState extends State<AudioText> {
       _text = recognizedWords;
       _accumulatedText += ' $recognizedWords';
     });
+    // Auto-save accumulated text periodically
+    if (_accumulatedText.isNotEmpty) {
+      _autoSaveText();
+    }
   }
 
   void _onSpeechError(String errorMessage) {
@@ -44,6 +47,9 @@ class _AudioTextState extends State<AudioText> {
       _isListening = false;
       _stopTimer();
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Transcription Error: $errorMessage')),
+    );
   }
 
   void _listen() {
@@ -75,6 +81,9 @@ class _AudioTextState extends State<AudioText> {
         _elapsedTime = Duration(seconds: _elapsedTime.inSeconds + 1);
         if (_elapsedTime.inSeconds >= 30) {
           _stopListening();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Recording stopped after 30 seconds')),
+          );
         }
       });
     });
@@ -99,10 +108,8 @@ class _AudioTextState extends State<AudioText> {
     _stopTimer();
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  Future<void> _autoSaveText() async {
+    await _fileStorageService.saveText(_accumulatedText);
   }
 
   @override

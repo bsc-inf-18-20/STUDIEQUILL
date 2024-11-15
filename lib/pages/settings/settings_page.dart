@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/pages/authetication/log_out.dart';
-import 'package:studie/pages/manage_subscription';
+// import 'package:studie/pages/manage_subscription';
 import 'delete_account.dart'; // Import your delete account logic
 import 'our_plans.dart';
 import 'help.dart';
@@ -51,14 +51,14 @@ class SettingsPage extends StatelessWidget {
                           builder: (context) => const OurPlansPage()),
                     );
                   }),
-                  _buildSettingOption(
-                      'Manage Subscription', Icons.subscriptions, context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ManageSubscriptionPage()),
-                    );
-                  }),
+                  // _buildSettingOption(
+                  //     'Manage Subscription', Icons.subscriptions, context, () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => ManageSubscriptionPage()),
+                  //   );
+                  // }),
                   _buildSettingOption('Help', Icons.help, context, () {
                     Navigator.push(
                       context,
