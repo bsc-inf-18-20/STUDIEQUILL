@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:studie/pages/file%20picker/pick_file_page.dart.dart';
 import 'package:studie/pages/home/files_page.dart';
+import 'package:studie/pages/home/share_file.dart';
 import 'package:studie/pages/notes_page.dart';
-import 'package:studie/pages/pickfile_page.dart';
-import 'package:studie/pages/home/workspace_page.dart';
+// import 'package:studie/pages/file%20picker/pick_file_page.dart.dart';
 import '../audio/recordings.dart';
 import '../settings/settings_page.dart';
 import 'package:studie/pages/audio/audio_text.dart';
@@ -63,55 +64,47 @@ class _HomePageState extends State<HomePage> {
     'share': const Color(0xFF673AB6),
   };
 
-  // Lazy initialize pages only when accessed
-  final List<Widget> _pages =
-      List<Widget>.filled(4, Container(), growable: false);
+  final List<Widget> _pages = [
+    const AudioText(),
+    const RecordsPage(),
+    const FilesPage(),
+    const SettingsPage(),
+  ];
 
-  List<NavigationItem> get _navigationItems => [
-        NavigationItem(
-            icon: Icons.home,
-            label: 'Home',
-            pageBuilder: () => const AudioText()),
-        NavigationItem(
-            icon: Icons.mic,
-            label: 'Recordings',
-            pageBuilder: () => const RecordsPage()),
-        NavigationItem(
-            icon: Icons.folder,
-            label: 'Files',
-            pageBuilder: () => const FilesPage()),
-        NavigationItem(
-          icon: Icons.settings,
-          label: 'Settings',
-          pageBuilder: () => SettingsPage(
-            isDarkMode: widget.isDarkMode,
-            onThemeChange: widget.onThemeChange,
-          ),
-        ),
-      ];
+  final List<NavigationItem> _navigationItems = [
+    NavigationItem(
+      icon: Icons.home,
+      label: 'Home',
+      pageBuilder: () => const AudioText(),
+    ),
+    NavigationItem(
+      icon: Icons.mic,
+      label: 'Recordings',
+      pageBuilder: () => const RecordsPage(),
+    ),
+    NavigationItem(
+      icon: Icons.folder,
+      label: 'Files',
+      pageBuilder: () => const FilesPage(),
+    ),
+    NavigationItem(
+      icon: Icons.settings,
+      label: 'Settings',
+      pageBuilder: () => const SettingsPage(),
+    ),
+  ];
 
   void _onItemTapped(int index) {
-    if (_selectedIndex == index) return; // Prevents unnecessary rebuilds
-    setState(() => _selectedIndex = index);
-
-    if (_pages[index] == Container()) {
-      _pages[index] = _navigationItems[index].pageBuilder();
-    }
-
-    // Navigate only if the page is not the main page
-    if (index != 0) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => _pages[index]),
-      );
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildHomePage(),
+      body: _buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
@@ -145,7 +138,10 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
       );
 
-  Widget _buildHomePage() => Padding(
+  Widget _buildBody() {
+    if (_selectedIndex == 0) {
+      // Display GridView for the Home page
+      return Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.count(
           crossAxisCount: 2,
@@ -154,6 +150,11 @@ class _HomePageState extends State<HomePage> {
           children: _buildGridItems(),
         ),
       );
+    }
+
+    // Display other pages
+    return _pages[_selectedIndex];
+  }
 
   List<Widget> _buildGridItems() => [
         _buildGridItem(
@@ -168,7 +169,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: 'Audio/Video File',
           icon: Icons.file_copy,
           color: _colorScheme['file']!,
-          page: PickFilePage(),
+          page: const PickFilePage(),
         ),
         _buildGridItem(
           title: 'From URL',
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: 'From WhatsApp',
           icon: Icons.share,
           color: _colorScheme['share']!,
-          page: const WorkspacePage(),
+          page: const ShareFilesPage(),
         ),
       ];
 
@@ -196,7 +197,9 @@ class _HomePageState extends State<HomePage> {
       GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => page));
+            context,
+            MaterialPageRoute(builder: (context) => page),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -229,7 +232,6 @@ class _HomePageState extends State<HomePage> {
       );
 }
 
-// Encapsulating navigation item properties
 class NavigationItem {
   final IconData icon;
   final String label;
