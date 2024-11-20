@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studie/pages/localisation/app_localizations.dart';
 import 'package:studie/pages/authetication/sign%20up/Sign_Up.dart';
 import 'package:studie/pages/home/HomePage.dart';
 import 'login_service.dart';
@@ -61,24 +60,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    String loginTitle =
-        AppLocalizations.of(context)?.getString('login_title') ??
-            'Login to Your Account';
-    String emailLabel =
-        AppLocalizations.of(context)?.getString('email_label') ?? 'Email';
-    String passwordLabel =
-        AppLocalizations.of(context)?.getString('password_label') ?? 'Password';
-    String loginButton =
-        AppLocalizations.of(context)?.getString('login_button') ?? 'Login';
-    String signupPrompt =
-        AppLocalizations.of(context)?.getString('signup_prompt') ??
-            'Don\'t have an account?';
-    String signupButton =
-        AppLocalizations.of(context)?.getString('signup_button') ?? 'Sign Up';
-
-    final locale = Localizations.localeOf(context);
-    final isChichewa = locale.languageCode == 'ny';
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -101,13 +82,13 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    loginTitle,
+                  const Text(
+                    'Login to Your Account',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isChichewa ? 18 : 24,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: const Color.fromARGB(255, 103, 58, 182),
+                      color: Color.fromARGB(255, 103, 58, 182),
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
@@ -115,26 +96,26 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: emailLabel,
-                      prefixIcon: const Icon(
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(
                         Icons.email,
                         color: Color.fromARGB(255, 103, 58, 182),
                       ),
-                      border: const OutlineInputBorder(),
+                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: passwordLabel,
-                      prefixIcon: const Icon(
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      prefixIcon: Icon(
                         Icons.lock,
                         color: Color.fromARGB(255, 103, 58, 182),
                       ),
-                      border: const OutlineInputBorder(),
+                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -147,9 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                                 const Color.fromARGB(255, 103, 58, 182),
                             padding: const EdgeInsets.symmetric(horizontal: 50),
                           ),
-                          child: Text(
-                            loginButton,
-                            style: const TextStyle(color: Colors.white),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                   const SizedBox(height: 10),
@@ -162,9 +143,9 @@ class _LoginPageState extends State<LoginPage> {
                   Wrap(
                     alignment: WrapAlignment.center,
                     children: [
-                      Text(
-                        signupPrompt,
-                        style: const TextStyle(color: Colors.grey),
+                      const Text(
+                        'Don\'t have an account? ',
+                        style: TextStyle(color: Colors.grey),
                       ),
                       TextButton(
                         onPressed: () {
@@ -177,9 +158,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         },
-                        child: Text(
-                          signupButton,
-                          style: const TextStyle(
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(
                               color: Color.fromARGB(255, 103, 58, 182)),
                         ),
                       ),
