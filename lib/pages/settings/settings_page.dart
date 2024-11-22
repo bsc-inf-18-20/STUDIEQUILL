@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studie/main.dart'; // For MyApp.setLocale
-import 'package:studie/pages/authetication/log_out.dart';
+import 'package:studie/pages/settings/log_out.dart'; // Logout function
 import 'delete_account.dart';
 import 'our_plans.dart';
 import 'help.dart';
@@ -127,11 +127,14 @@ class SettingsPage extends StatelessWidget {
                       Icons.delete, context, () {
                     deleteAccount(context); // Use the imported function
                   }, tileColor: Colors.red, textColor: Colors.white),
+                  // Logout option
                   _buildSettingOption(
-                      localizations.getString('logout'), Icons.logout, context,
-                      () {
-                    logout(context); // Use the imported function
-                  }, tileColor: Colors.blue, textColor: Colors.white),
+                      localizations.getString('logout'),
+                      Icons.logout,
+                      context,
+                      () => logout(context), // Calls the logout function
+                      tileColor: Colors.blue,
+                      textColor: Colors.white),
                 ],
               ),
             ),

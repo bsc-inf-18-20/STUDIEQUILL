@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:studie/pages/authetication/Login_Page.dart';
+import 'package:studie/pages/home/HomePage.dart';
 import 'package:studie/pages/localisation/app_localizations.dart';
 
 void main() async {
@@ -45,25 +47,21 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // List of supported locales
       supportedLocales: const [
         Locale('en', ''), // English
         Locale('ny', ''), // Chichewa
       ],
-      // Localization delegates
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate, // For Material widgets
         GlobalWidgetsLocalizations.delegate, // For generic widgets
         GlobalCupertinoLocalizations.delegate, // For Cupertino widgets
         AppLocalizationDelegate(), // Custom localization delegate
       ],
-      // Sets the current locale
       locale: _locale,
-      // Fallback if localization isn't found
       localeResolutionCallback:
           (Locale? locale, Iterable<Locale> supportedLocales) {
         if (locale == null) {
-          return supportedLocales.first; // Default to first supported locale
+          return supportedLocales.first;
         }
         for (final supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale.languageCode &&
@@ -73,7 +71,15 @@ class _MyAppState extends State<MyApp> {
         }
         return supportedLocales.first;
       },
-      home: const LoginPage(), // Initial screen
+      // Use a stream to determine the home page dynamically
+      home: const AuthStateHandler(),
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => HomePage(
+              isDarkMode: false,
+              onThemeChange: (value) {},
+            ),
+      },
     );
   }
 }
@@ -83,7 +89,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'ny'].contains(locale.languageCode); // Supported languages
+    return ['en', 'ny'].contains(locale.languageCode);
   }
 
   @override
@@ -94,5 +100,31 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
   @override
   bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) {
     return false;
+  }
+}
+
+// Dynamically decide which page to show based on authentication state
+class AuthStateHandler extends StatelessWidget {
+  const AuthStateHandler({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData) {
+          // If user is signed in, navigate to HomePage
+          return HomePage(
+            isDarkMode: false,
+            onThemeChange: (value) {},
+          );
+        } else {
+          // If user is not signed in, navigate to LoginPage
+          return const LoginPage();
+        }
+      },
+    );
   }
 }
