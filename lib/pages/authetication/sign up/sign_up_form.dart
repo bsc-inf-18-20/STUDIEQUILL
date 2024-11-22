@@ -21,6 +21,9 @@ class _SignUpFormState extends State<SignUpForm> {
   late SignUpController _controller;
   bool _isLoading = false;
 
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
   @override
   void initState() {
     super.initState();
@@ -79,14 +82,26 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _controller.passwordController,
               label: 'Password',
               icon: Icons.lock,
-              obscureText: true,
+              obscureText: _obscurePassword,
+              toggleObscureText: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+              hasToggle: true,
             ),
             const SizedBox(height: 16),
             _buildTextField(
               controller: _controller.confirmPasswordController,
               label: 'Confirm Password',
               icon: Icons.lock_outline,
-              obscureText: true,
+              obscureText: _obscureConfirmPassword,
+              toggleObscureText: () {
+                setState(() {
+                  _obscureConfirmPassword = !_obscureConfirmPassword;
+                });
+              },
+              hasToggle: true,
             ),
             const SizedBox(height: 20),
             _isLoading
@@ -113,6 +128,8 @@ class _SignUpFormState extends State<SignUpForm> {
     required String label,
     required IconData icon,
     bool obscureText = false,
+    VoidCallback? toggleObscureText,
+    bool hasToggle = false,
   }) {
     return TextField(
       controller: controller,
@@ -121,6 +138,15 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: label,
         prefixIcon: Icon(icon, color: const Color.fromARGB(255, 103, 58, 182)),
         border: const OutlineInputBorder(),
+        suffixIcon: hasToggle
+            ? IconButton(
+                icon: Icon(
+                  obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: const Color.fromARGB(255, 103, 58, 182),
+                ),
+                onPressed: toggleObscureText,
+              )
+            : null,
       ),
     );
   }
