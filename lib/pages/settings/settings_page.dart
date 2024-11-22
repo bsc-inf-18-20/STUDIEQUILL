@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studie/main.dart'; // For MyApp.setLocale
 import 'package:studie/pages/settings/log_out.dart'; // Logout function
 import 'delete_account.dart';
 import 'our_plans.dart';
@@ -8,7 +7,6 @@ import 'like_rate_us.dart';
 import 'about_us.dart';
 import 'invite.dart';
 import 'user_profile.dart';
-import 'package:studie/pages/localisation/app_localizations.dart'; // For localized strings
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
@@ -29,22 +27,23 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:
-              Text(AppLocalizations.of(context)!.getString('change_language')),
+          title: const Text('Change Language'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 title: const Text('English'),
                 onTap: () {
-                  MyApp.setLocale(context, const Locale('en'));
+                  MyApp.setLocale(
+                      context, const Locale('en', '')); // Set English
                   Navigator.of(context).pop(); // Close the dialog
                 },
               ),
               ListTile(
                 title: const Text('Chichewa'),
                 onTap: () {
-                  MyApp.setLocale(context, const Locale('ny'));
+                  MyApp.setLocale(
+                      context, const Locale('ny', '')); // Set Chichewa
                   Navigator.of(context).pop(); // Close the dialog
                 },
               ),
@@ -57,10 +56,10 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations =
-        AppLocalizations.of(context)!; // Get localized strings
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.getString('settings_title'))),
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -68,7 +67,7 @@ class SettingsPage extends StatelessWidget {
             const UserProfile(),
             const SizedBox(height: 10),
             SwitchListTile(
-              title: Text(localizations.getString('dark_mode')),
+              title: const Text('Dark Mode'),
               value: isDarkMode,
               onChanged: onThemeChange,
             ),
@@ -77,64 +76,98 @@ class SettingsPage extends StatelessWidget {
               child: ListView(
                 children: [
                   _buildSettingOption(
-                      localizations.getString('change_language'),
-                      Icons.language,
-                      context, () {
-                    _showLanguageSelectionDialog(context);
-                  }),
-                  _buildSettingOption(localizations.getString('our_plans'),
-                      Icons.assignment, context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const OurPlansPage()),
-                    );
-                  }),
+                    'Change Language',
+                    Icons.language,
+                    context,
+                    () {
+                      _showLanguageSelectionDialog(
+                          context); // Show language dialog
+                    },
+                  ),
                   _buildSettingOption(
-                      localizations.getString('help'), Icons.help, context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HelpPage()),
-                    );
-                  }),
-                  _buildSettingOption(localizations.getString('invite_friends'),
-                      Icons.person_add, context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InvitePage()),
-                    );
-                  }),
-                  _buildSettingOption(localizations.getString('like_rate_us'),
-                      Icons.star, context, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LikeRateUsPage()),
-                    );
-                  }),
+                    'Our Plans',
+                    Icons.assignment,
+                    context,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OurPlansPage(),
+                        ),
+                      );
+                    },
+                  ),
                   _buildSettingOption(
-                      localizations.getString('about_us'), Icons.info, context,
-                      () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AboutUsPage()),
-                    );
-                  }),
+                    'Help',
+                    Icons.help,
+                    context,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HelpPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingOption(
+                    'Invite Friends',
+                    Icons.person_add,
+                    context,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InvitePage(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingOption(
+                    'Like or Rate Us',
+                    Icons.star,
+                    context,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LikeRateUsPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingOption(
+                    'About Us',
+                    Icons.info,
+                    context,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AboutUsPage(),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 20),
-                  _buildSettingOption(localizations.getString('delete_account'),
-                      Icons.delete, context, () {
-                    deleteAccount(context); // Use the imported function
-                  }, tileColor: Colors.red, textColor: Colors.white),
-                  // Logout option
                   _buildSettingOption(
-                      localizations.getString('logout'),
-                      Icons.logout,
-                      context,
-                      () => logout(context), // Calls the logout function
-                      tileColor: Colors.blue,
-                      textColor: Colors.white),
+                    'Delete Account',
+                    Icons.delete,
+                    context,
+                    () {
+                      deleteAccount(context); // Use the imported function
+                    },
+                    tileColor: Colors.red,
+                    textColor: Colors.white,
+                  ),
+                  _buildSettingOption(
+                    'Logout',
+                    Icons.logout,
+                    context,
+                    () => logout(context), // Calls the logout function
+                    tileColor: Colors.blue,
+                    textColor: Colors.white,
+                  ),
                 ],
               ),
             ),
