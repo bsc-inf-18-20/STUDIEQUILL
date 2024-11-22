@@ -66,13 +66,13 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             const UserProfile(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             SwitchListTile(
               title: Text(localizations.getString('dark_mode')),
               value: isDarkMode,
               onChanged: onThemeChange,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView(
                 children: [
