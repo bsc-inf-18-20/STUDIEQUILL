@@ -40,17 +40,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (error == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login successful!')),
-      );
-
+      // Navigate to the HomePage after successful login
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HomePage(
-            isDarkMode: false,
-            onThemeChange: (value) {},
-          ),
-        ),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

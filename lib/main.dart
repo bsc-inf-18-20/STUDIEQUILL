@@ -19,14 +19,9 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,16 +32,14 @@ class _MyAppState extends State<MyApp> {
       home: const AuthStateHandler(), // Authentication state handler
       routes: {
         '/login': (context) => const LoginPage(),
-        '/home': (context) => HomePage(
-              isDarkMode: false,
-              onThemeChange: (value) {},
-            ),
+        '/home': (context) => const HomePage(), // Updated HomePage constructor
       },
     );
   }
 }
 
 class AuthStateHandler extends StatelessWidget {
+  // ignore: use_super_parameters
   const AuthStateHandler({Key? key}) : super(key: key);
 
   @override
@@ -57,13 +50,8 @@ class AuthStateHandler extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          // If user is signed in, navigate to HomePage
-          return HomePage(
-            isDarkMode: false,
-            onThemeChange: (value) {},
-          );
+          return const HomePage(); // Updated HomePage constructor
         } else {
-          // If user is not signed in, navigate to LoginPage
           return const LoginPage();
         }
       },
