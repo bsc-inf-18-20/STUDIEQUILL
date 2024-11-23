@@ -1,6 +1,4 @@
 
-
-
 // plugins {
 //     id "com.android.application"
 //     id "kotlin-android"
@@ -9,7 +7,7 @@
 // }
 
 // android {
-//     namespace = "com.example.studie"
+//     namespace = "com.example.studie" // Define the namespace (your app package)
 //     compileSdk = flutter.compileSdkVersion
 //     ndkVersion = flutter.ndkVersion
 
@@ -23,8 +21,8 @@
 //     }
 
 //     defaultConfig {
-//         applicationId = "com.example.studie"
-//         minSdk = 23 // Minimum SDK version you want to support
+//         applicationId = "com.example.studie" // Your app's package name
+//         minSdk = 23 // Minimum SDK version you want to support (can be reduced to 21 for wider support)
 //         targetSdk = flutter.targetSdkVersion
 //         versionCode = flutter.versionCode
 //         versionName = flutter.versionName
@@ -41,6 +39,12 @@
 //     source = "../.."
 // }
 
+// // Additional repositories if needed
+// repositories {
+//     google()
+//     mavenCentral()  // Prefer mavenCentral instead of jcenter()
+// }
+
 
 plugins {
     id "com.android.application"
@@ -51,7 +55,9 @@ plugins {
 
 android {
     namespace = "com.example.studie" // Define the namespace (your app package)
-    compileSdk = flutter.compileSdkVersion
+
+    // Update to API level 31 or higher
+    compileSdk = 34  // Set this to at least 31 (Android 12)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -66,7 +72,8 @@ android {
     defaultConfig {
         applicationId = "com.example.studie" // Your app's package name
         minSdk = 23 // Minimum SDK version you want to support (can be reduced to 21 for wider support)
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34 // Set this to at least 31 (Android 12)
+
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
