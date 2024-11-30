@@ -32,12 +32,12 @@ class FilePickerService {
     if (result != null) {
       return result.files.first;
     }
-    return null; // Return null if no file is selected
+    return null; 
   }
 
   // Simulate audio transcription (this can be replaced with a real transcription service)
   Future<String> transcribeAudioFile(File audioFile) async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate a delay
+    await Future.delayed(const Duration(seconds: 2));
     return "This is a simulated transcription of the audio file."; // Simulated result
   }
 }
