@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core for initialization
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:studie/pages/authetication/auth_service.dart';
@@ -17,7 +18,11 @@ void main() {
     late MockUserCredential mockUserCredential;
     late MockUser mockUser;
 
-    setUp(() {
+    // Initialize Firebase in test setup
+    setUp(() async {
+      // Mock Firebase initialization
+      await Firebase.initializeApp(); // Ensure Firebase is initialized
+
       mockFirebaseAuth = MockFirebaseAuth();
       mockUserCredential = MockUserCredential();
       mockUser = MockUser();
