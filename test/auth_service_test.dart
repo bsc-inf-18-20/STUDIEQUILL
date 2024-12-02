@@ -11,6 +11,8 @@ class MockUserCredential extends Mock implements UserCredential {}
 
 class MockUser extends Mock implements User {}
 
+class MockFirebaseCore extends Mock implements Firebase {}
+
 void main() {
   group('AuthService', () {
     late AuthService authService;
@@ -19,10 +21,14 @@ void main() {
     late MockUser mockUser;
 
     // Initialize Firebase in test setup
-    setUp(() async {
-      // Mock Firebase initialization
-      await Firebase.initializeApp(); // Ensure Firebase is initialized
+    setUpAll(() async {
+      // Mock Firebase.initializeApp so that it doesn't try to establish a real connection
+      Firebase.initializeApp =
+          () async {}; // No-op mock for Firebase initialization
+    });
 
+    setUp(() {
+      // Create instances for each test
       mockFirebaseAuth = MockFirebaseAuth();
       mockUserCredential = MockUserCredential();
       mockUser = MockUser();
