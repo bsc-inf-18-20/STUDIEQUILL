@@ -1,30 +1,63 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:studie/pages/file%20picker/file_picker_service.dart';
+import 'package:studie/pages/home/file_picker_service.dart';
 import 'package:test/test.dart';
 
+// Mock Classes
 class MockPermission extends Mock implements Permission {}
 
-class MockFilePickerPlatform extends Mock implements FilePickerPlatform {}
+class MockFilePickerPlatform extends Mock implements FilePickerPlatform {
+  @override
+  Future<FilePickerResult?> pickFiles({
+    required FileType type,
+    List<String>? allowedExtensions,
+    bool allowMultiple = false,
+    bool withData = false,
+    bool allowCompression = true,
+    String? dialogTitle,
+    bool lockParentWindow = false,
+  }) {
+    return super.noSuchMethod(
+      Invocation.method(
+        #pickFiles,
+        [],
+        {
+          #type: type,
+          #allowedExtensions: allowedExtensions,
+          #allowMultiple: allowMultiple,
+          #withData: withData,
+          #allowCompression: allowCompression,
+          #dialogTitle: dialogTitle,
+          #lockParentWindow: lockParentWindow,
+        },
+      ),
+      returnValue: Future<FilePickerResult?>.value(null),
+      returnValueForMissingStub: Future<FilePickerResult?>.value(null),
+    );
+  }
+}
 
 class MockFile extends Mock implements File {}
 
 void main() {
   group('FilePickerService', () {
     late FilePickerService filePickerService;
+    late MockFilePickerPlatform mockFilePickerPlatform;
     late MockFile mockFile;
 
     setUp(() {
       filePickerService = FilePickerService();
+      mockFilePickerPlatform = MockFilePickerPlatform();
+      FilePicker.platform =
+          mockFilePickerPlatform; // Override platform for testing
       mockFile = MockFile();
     });
 
-    test('requestStoragePermission should return true if permission is granted',
+    test('requestStoragePermission returns true when permission is granted',
         () async {
-      // Mocking the Permission handler
+      // Mock permission status as granted
       when(Permission.storage.status)
           .thenAnswer((_) async => PermissionStatus.granted);
 
@@ -34,9 +67,9 @@ void main() {
     });
 
     test(
-        'requestStoragePermission should return false if permission is permanently denied',
+        'requestStoragePermission returns false when permission is permanently denied',
         () async {
-      // Mocking the Permission handler
+      // Mock permission status as permanently denied
       when(Permission.storage.status)
           .thenAnswer((_) async => PermissionStatus.permanentlyDenied);
 
@@ -45,14 +78,14 @@ void main() {
       expect(result, isFalse);
     });
 
-    test('pickAudioFile should return PlatformFile if a file is selected',
+    test('pickAudioFile returns a PlatformFile when a file is selected',
         () async {
       final mockResult = FilePickerResult([
-        PlatformFile(name: 'test.mp3', size: 123, path: '/path/to/test.mp3')
+        PlatformFile(name: 'test.mp3', size: 123, path: '/path/to/test.mp3'),
       ]);
 
-      // Mocking FilePicker behavior
-      when(FilePicker.platform.pickFiles(
+      // Mock file picker behavior
+      when(mockFilePickerPlatform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['mp3', 'wav', 'm4a'],
       )).thenAnswer((_) async => mockResult);
@@ -63,9 +96,9 @@ void main() {
       expect(result?.name, 'test.mp3');
     });
 
-    test('pickAudioFile should return null if no file is selected', () async {
-      // Mocking FilePicker behavior
-      when(FilePicker.platform.pickFiles(
+    test('pickAudioFile returns null when no file is selected', () async {
+      // Mock file picker returning null
+      when(mockFilePickerPlatform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['mp3', 'wav', 'm4a'],
       )).thenAnswer((_) async => null);
@@ -75,7 +108,7 @@ void main() {
       expect(result, isNull);
     });
 
-    test('transcribeAudioFile should return simulated transcription', () async {
+    test('transcribeAudioFile returns simulated transcription', () async {
       when(mockFile.path).thenReturn('/path/to/test.mp3');
 
       final result = await filePickerService.transcribeAudioFile(mockFile);
