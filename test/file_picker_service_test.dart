@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 // Mock Classes
 class MockPermission extends Mock implements Permission {}
 
-class MockFilePickerPlatform extends Mock implements FilePickerPlatform {
+class MockFilePicker extends Mock implements FilePicker {
   @override
   Future<FilePickerResult?> pickFiles({
     required FileType type,
@@ -18,7 +18,15 @@ class MockFilePickerPlatform extends Mock implements FilePickerPlatform {
     bool allowCompression = true,
     String? dialogTitle,
     bool lockParentWindow = false,
+    void Function(FilePickerStatus)? onFileLoading,
+    String? initialDirectory,
   }) {
+    // Handle the onFileLoading callback if provided
+    if (onFileLoading != null) {
+      onFileLoading(FilePickerStatus.loading); // Simulate loading status
+    }
+
+    // Return a mocked result after simulating a file pick
     return super.noSuchMethod(
       Invocation.method(
         #pickFiles,
@@ -31,9 +39,13 @@ class MockFilePickerPlatform extends Mock implements FilePickerPlatform {
           #allowCompression: allowCompression,
           #dialogTitle: dialogTitle,
           #lockParentWindow: lockParentWindow,
+          #onFileLoading: onFileLoading,
+          #initialDirectory: initialDirectory,
         },
       ),
-      returnValue: Future<FilePickerResult?>.value(null),
+      returnValue: Future<FilePickerResult?>.value(FilePickerResult([
+        PlatformFile(name: 'test.mp3', size: 123, path: '/path/to/test.mp3'),
+      ])),
       returnValueForMissingStub: Future<FilePickerResult?>.value(null),
     );
   }
@@ -44,14 +56,13 @@ class MockFile extends Mock implements File {}
 void main() {
   group('FilePickerService', () {
     late FilePickerService filePickerService;
-    late MockFilePickerPlatform mockFilePickerPlatform;
+    late MockFilePicker mockFilePicker;
     late MockFile mockFile;
 
     setUp(() {
       filePickerService = FilePickerService();
-      mockFilePickerPlatform = MockFilePickerPlatform();
-      FilePicker.platform =
-          mockFilePickerPlatform; // Override platform for testing
+      mockFilePicker = MockFilePicker();
+      FilePicker.platform = mockFilePicker; // Override platform for testing
       mockFile = MockFile();
     });
 
@@ -85,7 +96,7 @@ void main() {
       ]);
 
       // Mock file picker behavior
-      when(mockFilePickerPlatform.pickFiles(
+      when(mockFilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['mp3', 'wav', 'm4a'],
       )).thenAnswer((_) async => mockResult);
@@ -98,7 +109,7 @@ void main() {
 
     test('pickAudioFile returns null when no file is selected', () async {
       // Mock file picker returning null
-      when(mockFilePickerPlatform.pickFiles(
+      when(mockFilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['mp3', 'wav', 'm4a'],
       )).thenAnswer((_) async => null);
