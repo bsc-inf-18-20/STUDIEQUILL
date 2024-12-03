@@ -1,51 +1,4 @@
 
-// plugins {
-//     id "com.android.application"
-//     id "kotlin-android"
-//     id "dev.flutter.flutter-gradle-plugin"
-//     id 'com.google.gms.google-services' // Apply Google Services plugin
-// }
-
-// android {
-//     namespace = "com.example.studie" // Define the namespace (your app package)
-//     compileSdk = flutter.compileSdkVersion
-//     ndkVersion = flutter.ndkVersion
-
-//     compileOptions {
-//         sourceCompatibility = JavaVersion.VERSION_1_8
-//         targetCompatibility = JavaVersion.VERSION_1_8
-//     }
-
-//     kotlinOptions {
-//         jvmTarget = JavaVersion.VERSION_1_8
-//     }
-
-//     defaultConfig {
-//         applicationId = "com.example.studie" // Your app's package name
-//         minSdk = 23 // Minimum SDK version you want to support (can be reduced to 21 for wider support)
-//         targetSdk = flutter.targetSdkVersion
-//         versionCode = flutter.versionCode
-//         versionName = flutter.versionName
-//     }
-
-//     buildTypes {
-//         release {
-//             signingConfig = signingConfigs.debug // Change this to your release signing config if needed
-//         }
-//     }
-// }
-
-// flutter {
-//     source = "../.."
-// }
-
-// // Additional repositories if needed
-// repositories {
-//     google()
-//     mavenCentral()  // Prefer mavenCentral instead of jcenter()
-// }
-
-
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -55,9 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.studie" // Define the namespace (your app package)
-
-    // Update to API level 31 or higher
-    compileSdk = 34  // Set this to at least 31 (Android 12)
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -72,8 +23,7 @@ android {
     defaultConfig {
         applicationId = "com.example.studie" // Your app's package name
         minSdk = 23 // Minimum SDK version you want to support (can be reduced to 21 for wider support)
-        targetSdk = 34 // Set this to at least 31 (Android 12)
-
+        targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -94,3 +44,4 @@ repositories {
     google()
     mavenCentral()  // Prefer mavenCentral instead of jcenter()
 }
+
