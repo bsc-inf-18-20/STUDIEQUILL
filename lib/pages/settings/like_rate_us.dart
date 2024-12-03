@@ -17,16 +17,12 @@ class LikeRateUsPage extends StatelessWidget {
             const Text('Enjoying the app? Leave us a review!'),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Implement logic to open app store for rating
-              },
+              onPressed: () {},
               child: const Text('Rate Us on App Store'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Implement social media sharing logic
-              },
+              onPressed: () {},
               child: const Text('Share on Social Media'),
             ),
           ],
