@@ -59,7 +59,7 @@ class _UrlInputPageState extends State<UrlInputPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _processUrl,
-                child: const Text('Submit'),
+                child: const Text('transcribe'),
               ),
             ],
           ),

@@ -4,16 +4,15 @@
 // import 'package:studie/pages/audio/recordings.dart';
 // import 'package:studie/pages/authetication/Login_Page.dart';
 // import 'package:studie/pages/file%20picker/pick_file_page.dart.dart';
+// import 'package:studie/pages/home/UrlInputPage.dart';
 // import 'package:studie/pages/home/files_page.dart';
 // import 'package:studie/pages/home/share_file.dart';
-// import 'package:studie/pages/notes_page.dart';
-// import 'package:studie/pages/settings/settings_page.dart'; // Ensure this exists and is properly routed
+// import 'package:studie/pages/settings/settings_page.dart';
 
 // class HomePage extends StatefulWidget {
 //   const HomePage({super.key});
 
 //   @override
-//   // ignore: library_private_types_in_public_api
 //   _HomePageState createState() => _HomePageState();
 // }
 
@@ -130,7 +129,7 @@
 //           subtitle: 'From YouTube',
 //           icon: Icons.link,
 //           color: _colorScheme['url']!,
-//           page: const NotesPage(),
+//           page: UrlInputPage(), // Updated to navigate to UrlInputPage
 //         ),
 //         _buildGridItem(
 //           title: 'Share File',
@@ -163,8 +162,7 @@
 //           child: Center(
 //             child: Column(
 //               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment:
-//                   CrossAxisAlignment.center, // Center content horizontally
+//               crossAxisAlignment: CrossAxisAlignment.center,
 //               children: [
 //                 Icon(icon, size: 50, color: color),
 //                 const SizedBox(height: 10),
@@ -208,6 +206,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  bool _isDarkMode = false; // Tracks the theme mode
 
   final Map<String, Color> _colorScheme = {
     'record': const Color(0xFF673AB6),
@@ -229,6 +228,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
+
   Future<void> _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -244,22 +249,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Studiequil",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: _logout,
+    return MaterialApp(
+      theme: _isDarkMode
+          ? ThemeData.dark().copyWith(primaryColor: _colorScheme['record'])
+          : ThemeData.light().copyWith(primaryColor: _colorScheme['record']),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Studiequil",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
-        ],
-        backgroundColor: _colorScheme['record'],
+          actions: [
+            IconButton(
+              icon: Icon(
+                _isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                color: Colors.white,
+              ),
+              onPressed: _toggleTheme, // Toggles the theme
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: _logout,
+            ),
+          ],
+          backgroundColor: _colorScheme['record'],
+        ),
+        body: _buildBody(),
+        bottomNavigationBar: _buildBottomNavigationBar(),
       ),
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
