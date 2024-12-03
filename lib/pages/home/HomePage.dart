@@ -10,16 +10,10 @@
 // import 'package:studie/pages/settings/settings_page.dart'; // Ensure this exists and is properly routed
 
 // class HomePage extends StatefulWidget {
-//   final bool isDarkMode;
-//   final ValueChanged<bool> onThemeChange;
-
-//   const HomePage({
-//     super.key,
-//     required this.isDarkMode,
-//     required this.onThemeChange,
-//   });
+//   const HomePage({super.key});
 
 //   @override
+//   // ignore: library_private_types_in_public_api
 //   _HomePageState createState() => _HomePageState();
 // }
 
@@ -68,13 +62,6 @@
 //           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
 //         ),
 //         actions: [
-//           IconButton(
-//             icon: Icon(
-//               widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-//               color: Colors.white,
-//             ),
-//             onPressed: () => widget.onThemeChange(!widget.isDarkMode),
-//           ),
 //           IconButton(
 //             icon: const Icon(Icons.logout, color: Colors.white),
 //             onPressed: _logout,
@@ -207,10 +194,10 @@ import 'package:studie/pages/audio/audio_text.dart';
 import 'package:studie/pages/audio/recordings.dart';
 import 'package:studie/pages/authetication/Login_Page.dart';
 import 'package:studie/pages/file%20picker/pick_file_page.dart.dart';
+import 'package:studie/pages/home/UrlInputPage.dart';
 import 'package:studie/pages/home/files_page.dart';
 import 'package:studie/pages/home/share_file.dart';
-import 'package:studie/pages/notes_page.dart';
-import 'package:studie/pages/settings/settings_page.dart'; // Ensure this exists and is properly routed
+import 'package:studie/pages/settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -332,7 +319,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: 'From YouTube',
           icon: Icons.link,
           color: _colorScheme['url']!,
-          page: const NotesPage(),
+          page: UrlInputPage(), // Updated to navigate to UrlInputPage
         ),
         _buildGridItem(
           title: 'Share File',
@@ -365,8 +352,7 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, // Center content horizontally
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(icon, size: 50, color: color),
                 const SizedBox(height: 10),
