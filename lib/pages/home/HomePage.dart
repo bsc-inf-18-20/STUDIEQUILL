@@ -18,6 +18,7 @@
 
 // class _HomePageState extends State<HomePage> {
 //   int _selectedIndex = 0;
+//   bool _isDarkMode = false; // Tracks the theme mode
 
 //   final Map<String, Color> _colorScheme = {
 //     'record': const Color(0xFF673AB6),
@@ -39,6 +40,12 @@
 //     });
 //   }
 
+//   void _toggleTheme() {
+//     setState(() {
+//       _isDarkMode = !_isDarkMode;
+//     });
+//   }
+
 //   Future<void> _logout() async {
 //     try {
 //       await FirebaseAuth.instance.signOut();
@@ -54,22 +61,34 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           "Studiequil",
-//           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-//         ),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.logout, color: Colors.white),
-//             onPressed: _logout,
+//     return MaterialApp(
+//       theme: _isDarkMode
+//           ? ThemeData.dark().copyWith(primaryColor: _colorScheme['record'])
+//           : ThemeData.light().copyWith(primaryColor: _colorScheme['record']),
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: const Text(
+//             "Studiequil",
+//             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
 //           ),
-//         ],
-//         backgroundColor: _colorScheme['record'],
+//           actions: [
+//             IconButton(
+//               icon: Icon(
+//                 _isDarkMode ? Icons.dark_mode : Icons.light_mode,
+//                 color: Colors.white,
+//               ),
+//               onPressed: _toggleTheme, // Toggles the theme
+//             ),
+//             IconButton(
+//               icon: const Icon(Icons.logout, color: Colors.white),
+//               onPressed: _logout,
+//             ),
+//           ],
+//           backgroundColor: _colorScheme['record'],
+//         ),
+//         body: _buildBody(),
+//         bottomNavigationBar: _buildBottomNavigationBar(),
 //       ),
-//       body: _buildBody(),
-//       bottomNavigationBar: _buildBottomNavigationBar(),
 //     );
 //   }
 
@@ -188,6 +207,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:studie/pages/audio/audio_text.dart';
 import 'package:studie/pages/audio/recordings.dart';
 import 'package:studie/pages/authetication/Login_Page.dart';
@@ -196,6 +216,7 @@ import 'package:studie/pages/home/UrlInputPage.dart';
 import 'package:studie/pages/home/files_page.dart';
 import 'package:studie/pages/home/share_file.dart';
 import 'package:studie/pages/settings/settings_page.dart';
+import '../../main.dart'; // Import the ThemeNotifier
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -206,7 +227,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  bool _isDarkMode = false; // Tracks the theme mode
 
   final Map<String, Color> _colorScheme = {
     'record': const Color(0xFF673AB6),
@@ -228,12 +248,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-  }
-
   Future<void> _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -249,34 +263,31 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: _isDarkMode
-          ? ThemeData.dark().copyWith(primaryColor: _colorScheme['record'])
-          : ThemeData.light().copyWith(primaryColor: _colorScheme['record']),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Studiequil",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                _isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                color: Colors.white,
-              ),
-              onPressed: _toggleTheme, // Toggles the theme
-            ),
-            IconButton(
-              icon: const Icon(Icons.logout, color: Colors.white),
-              onPressed: _logout,
-            ),
-          ],
-          backgroundColor: _colorScheme['record'],
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Studiequil",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        body: _buildBody(),
-        bottomNavigationBar: _buildBottomNavigationBar(),
+        actions: [
+          IconButton(
+            icon: Icon(
+              themeNotifier.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: Colors.white,
+            ),
+            onPressed: themeNotifier.toggleTheme,
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: _logout,
+          ),
+        ],
+        backgroundColor: _colorScheme['record'],
       ),
+      body: _buildBody(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -336,7 +347,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: 'From YouTube',
           icon: Icons.link,
           color: _colorScheme['url']!,
-          page: UrlInputPage(), // Updated to navigate to UrlInputPage
+          page: UrlInputPage(),
         ),
         _buildGridItem(
           title: 'Share File',
